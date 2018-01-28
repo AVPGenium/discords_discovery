@@ -1,13 +1,17 @@
 #pragma once
-class PAA {
-protected:
-	double * const vector;
+
+namespace PAA {
+	// итоговый вектор с точками временного ряда в PAA представлении
+	double * vector;
+	// длина итогового ряда
 	int length;
 	int* counts;
-public:
-	PAA(int len) :length(len), vector(new double[len]), counts(new int[len]) {}
-	void apply(double * timeSeries, int length);
+
+	// инициализация
+	void init(int len);
+	// преобразование временного ряда timeSeries длины len в PAA представление
+	void apply(double * timeSeries, int len);
 	double * const getVector() { return vector; };
-	int getLength() const { return length; };
+	int getLength() { return length; };
 	double getIndex(int i) { return i >= 0 && i < length ? vector[i] : -1; };
-};
+}
