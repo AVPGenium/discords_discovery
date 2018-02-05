@@ -1,42 +1,41 @@
-#pragma once
+#ifndef SAX_H
+#define SAX_H
 #include <iostream>
 #include <deque>
 #include <vector>
 #include <cassert>
 #include <boost/math/distributions/normal.hpp>
+#include "Utils.h"
 
 using std::deque;
 using std::vector;
 
 using namespace std;
 
-size_t m_window_size;
-size_t m_string_size;
-size_t m_alphabet_size;
+extern size_t m_window_size;
+extern size_t m_string_size;
+extern size_t m_alphabet_size;
+extern timeseries_properties_t timeseriesWithProperties;
 
-double m_baseline_mean;
-double m_baseline_stdev;
-bool m_trained;
 
 /**
-* Calculates the cutpoints table for given alphabet size.
-* @param alphabet_size The alphabet size.
-* @param cutpoints out cutpoints var.
-*/
-inline void fill_cutpoints(size_t alphabet_size, vector<double> *cutpoints) {
-	assert(alphabet_size > 0);
-	static boost::math::normal dist(0.0, 1.0);
-	std::cout << "alphabet: " << alphabet_size << std::endl;
-	cutpoints->reserve(alphabet_size);
-	cutpoints->push_back(-DBL_MAX);
-	for (size_t i = 1; i < alphabet_size; ++i) {
-		double cdf = ((double)i) / alphabet_size;
-		cutpoints->push_back(quantile(dist, cdf));
-	}
-}
+ * Calculates the mean and stdev of the time series.
+ * @param timeSeries The first point.
+ */
+void init(const vector<double> *timeSeries, size_t window_size, size_t string_size, size_t alphabet_size);
 
 /**
-* Calculates the mean and stdev of the time series.
-* @param timeSeries The first point.
-*/
-void train(vector<double> *timeSeries);
+ * Converting a subsequence to a character representation
+ * private method
+ * @param seq subsequence
+ * @param syms symbolic representation
+ */
+void saxify(vector<double> * seq, vector<char> *syms);
+
+/**
+ * Transformation of the time series in the SAX representation
+ * @param seq original series
+ * @param qseq quantized series
+ */
+size_t quantize(const vector<double> * seq, vector<int> *qseq, bool reduce = true);
+#endif

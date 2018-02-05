@@ -3,7 +3,6 @@
 #include <iostream>
 #include <assert.h>
 #include <vector>
-using namespace std;
 
 void testPAA();
 void testZNormalization();
@@ -42,9 +41,9 @@ void testPAA()
 	double eps = 0.5;
 	int length = 7;
 	//Выполнение действий и проверки
-	PAA::init(length);
-	PAA::apply(series, 15);
-	double* result = PAA::getVector();
+	initPAA(length);
+	applyPAA(series, 15);
+	double* result = paaRepresentation;
 	// 7 -> (2.23, 5.62, 8.67, 6.36, 4.58, 3.33, 1.45)
 	// 9 -> (2.14, 3.63, 8.26, 8.28, 6.27, 4.65, 4.45, 2.39, 1.38)
 	for (int i = 0; i < length; i++)
@@ -53,9 +52,9 @@ void testPAA()
 		std::cout << result[i] << std::endl;
 	}
 	length = 9;
-	PAA::init(length);
-	PAA::apply(series, 15);
-	result = PAA::getVector();
+	initPAA(length);
+	applyPAA(series, 15);
+	result = paaRepresentation;
 	for (int i = 0; i < length; i++)
 	{
 		assert(abs(result[i] - expected2[i]) < eps);

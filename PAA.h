@@ -1,17 +1,22 @@
-#pragma once
+#ifndef PAA_H
+#define PAA_H
+	// the resulting vector with the time series points in the PAA representation
+	extern double * paaRepresentation;
+	// length of the final series
+	extern int length;
+	// countdowns
+	extern int* counts;
 
-namespace PAA {
-	// итоговый вектор с точками временного ряда в PAA представлении
-	double * vector;
-	// длина итогового ряда
-	int length;
-	int* counts;
+	/**
+	 * initialization of current PAA convertion session
+	 * @param len length of new series
+	 */
+	void initPAA(int len);
 
-	// инициализация
-	void init(int len);
-	// преобразование временного ряда timeSeries длины len в PAA представление
-	void apply(double * timeSeries, int len);
-	double * const getVector() { return vector; };
-	int getLength() { return length; };
-	double getIndex(int i) { return i >= 0 && i < length ? vector[i] : -1; };
-}
+	/**
+	 * Time series conversion into PAA representation
+	 * @param timeSeries original time series
+	 * @param len length of time series 
+	 */
+	void applyPAA(double * timeSeries, int len);
+#endif
