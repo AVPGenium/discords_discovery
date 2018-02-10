@@ -1,0 +1,34 @@
+\newcommand{\forcond}{$i=0$ \KwTo $n$}
+
+\begin{algorithm}[H]
+	\AlgoDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoBlockMarkers{}{end}
+	\SetKwProg{Fn}{}{}{end}
+	\SetKwFunction{FBruteForce}{[dist, loc] BruteForce}%
+
+	\caption{\newline BRUTE-FORCE алгоритм поиска диссонансов}\label{algo:BRUTE-FORCE}
+	
+	\Fn(){\FBruteForce{T,n}}{
+		
+		\KwData{best\_so\_far\_dist = 0} 
+		\KwData{best\_so\_far\_loc = NaN} 
+		
+		\For {p = 1 to $|T| - n + 1$}{         
+			\KwData{nearest\_neighbor\_dist = infinity} 
+			\For {q = 1 to $|T| - n + 1$}{
+				//non-self match?
+				
+				\If {($|p - q| \geq n$}{ 
+					\If { Dist ($t_{p},..., t_{p+n-1},  t_{q},...,t_{q+n-1}$ ) 
+						< nearest\_neighbor\_dist }{
+						nearest\_neighbor\_dist = Dist ($  t_{p},...,t_{p+n-1}  ,  t_{q},...,t_{q+n-1}  $)
+					}
+				} 
+			}
+			\If {nearest\_neighbor\_dist > best\_so\_far\_dist}{ 
+				best\_so\_far\_dist = nearest\_neighbor\_dist 
+				best\_so\_far\_loc  = p 
+			}
+		}
+		\KwResult{[ best\_so\_far\_dist, best\_so\_far\_loc ] }
+	}
+\end{algorithm}

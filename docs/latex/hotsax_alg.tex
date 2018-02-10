@@ -1,0 +1,33 @@
+
+\begin{algorithm}[H]
+	\AlgoDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoBlockMarkers{}{end}
+	\SetKwProg{Fn}{}{}{end}
+	\SetKwFunction{FHeuristicSearc}{[dist, loc] HeuristicSearch}%
+
+	\caption{\newline Алгоритм поиска диссонансов на основе эвристик}\label{algo:HEURISTIC}
+	
+	\Fn(){\FHeuristicSearc{T,n}}{
+		
+		\KwData{best\_so\_far\_dist = 0} 
+		\KwData{best\_so\_far\_loc = NaN} 
+		
+		\For {Each p in $T$ ordered by heuristic Inner}{         
+			\KwData{nearest\_neighbor\_dist = infinity} 
+			\For {Each q in $T$ ordered by heuristic Outer}{
+				//non-self match?
+				
+				\If {($|p - q| \geq n$}{ 
+					\If { Dist ($t_{p},..., t_{p+n-1},  t_{q},...,t_{q+n-1}$ ) 
+						< best\_so\_far\_dist }{
+						Break
+					}
+				} 
+			}
+			\If {nearest\_neighbor\_dist > best\_so\_far\_dist}{ 
+				best\_so\_far\_dist = nearest\_neighbor\_dist 
+				best\_so\_far\_loc  = p 
+			}
+		}
+		\KwResult{[ best\_so\_far\_dist, best\_so\_far\_loc ] }
+	}
+\end{algorithm}
