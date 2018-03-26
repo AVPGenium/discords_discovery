@@ -6,6 +6,8 @@
 #include <cmath>
 #include <cassert>
 #include "Utils.h"
+#include "Config.h"
+#include "DiscordsRun.h"
 
 using namespace std;
 
@@ -64,4 +66,30 @@ double distance(double series1[], double series2[], long length)
 		sum += distance(series1[i], series2[i]);
 	}
 	return sum;
+}
+
+item_t min(series_t series)
+{
+	item_t result = series[0];
+	for (long i = 0; i < n; i++)
+	{
+		if (series[i] < result)
+		{
+			result = series[i];
+		}
+	}
+	return result;
+}
+
+item_t max(series_t series)
+{
+	item_t result = series[0];
+	for (long i = 0; i < n; i++)
+	{
+		if (series[i] > result)
+		{
+			result = series[i];
+		}
+	}
+	return result;
 }

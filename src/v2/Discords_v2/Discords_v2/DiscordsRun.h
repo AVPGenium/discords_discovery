@@ -3,9 +3,14 @@
 
 #include "Config.h"
 
-extern int bsfPos;
-extern float bsfDist;
-extern series_t timeSeries;
+int bsfPos;
+float bsfDist;
+series_t timeSeries;
+
+// length of full time series
+int m;
+// length of one subsequence
+int n;
 
 void start();
 

@@ -6,11 +6,6 @@
 #define CONFIG_H
 
 /* Algorithm params */
-
-// length of full time series
-int m;
-// length of one subsequence
-int n;
 // in the future there can be param k - number of discord
 
 /* Types and defines */

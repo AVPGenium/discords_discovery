@@ -16,7 +16,7 @@
 * @param p2 The second point.
 * @return The Euclidean distance.
 */
-extern double distance(double p1, double p2);
+double distance(double p1, double p2);
 
 /**
 * Calculates the square of the Euclidean distance between two 1D points represented by real values.
