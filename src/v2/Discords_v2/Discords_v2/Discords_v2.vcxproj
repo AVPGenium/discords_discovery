@@ -154,6 +154,7 @@
       <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</UseMSVC>
       <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</UseMSVC>
     </ClCompile>
+    <ClCompile Include="DistanceMatrix.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>

@@ -158,6 +158,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Discords_v2\DiscordsRun.cpp" />
+    <ClCompile Include="..\Discords_v2\DistanceMatrix.cpp" />
     <ClCompile Include="..\Discords_v2\Utils.cpp" />
     <ClCompile Include="algs\discords.cpp" />
     <ClCompile Include="CheckAlgsTest.cpp" />

@@ -3,21 +3,41 @@
 
 #include "Config.h"
 
-int bsfPos;
-float bsfDist;
-series_t timeSeries;
+extern int bsfPos;
+extern float bsfDist;
+extern series_t timeSeries;
 
 // length of full time series
-int m;
+extern int m;
 // length of one subsequence
-int n;
+extern int n;
 
 void start();
 
-void findDistances();
+void prepareConfig();
 
-void findBsfParams();
+int findDiscord(const series_t T,  const int n, float* bsf_dist);
 
-int* findSelfMatch(series_t timeSeries, long startIndex);
+matrix_t createSubsequencies(const series_t T, const int n);
+
+/**
+* Ќахождени€ количества non-self-match подпоследовательностей
+* дл€ заданной подпоследовательности
+* @param m - длина временного р€да
+* @param n - длина подпоследовательности
+* @param p - индекс начала подпоследовательности
+* @return количество non-self-match подпоследовательностей
+*/
+int* findSelfMatch(int m, int n, long startIndex);
+
+/**
+ * Ќахождени€ количества non-self-match подпоследовательностей
+ * дл€ заданной подпоследовательности
+ * @param m - длина временного р€да
+ * @param n - длина подпоследовательности
+ * @param p - индекс начала подпоследовательности
+ * @return количество non-self-match подпоследовательностей
+ */
+int countNonSelfMatchSubsequencies(int m, int n, int p);
 
 #endif

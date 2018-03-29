@@ -45,8 +45,8 @@ double distance2(double point1[], double point2[], long length);
 */
 double distance(double series1[], double series2[], long length);
 
-item_t min(series_t series);
+item_t min(const series_t series, const int length, int* position);
 
-item_t max(series_t series);
+item_t max(const series_t series, const int length, int* position);
 
 #endif

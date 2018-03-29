@@ -5,10 +5,10 @@
 
 extern matrix_t matrix;
 
-matrix_t createDistanceMatrix(float** timeSeriesSubsequences);
+matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSubsequences);
 
-float findRowMinElement(long rowIndex);
+float findRowMinElement(const long rowIndex, const long n, const matrix_t distanceMatrix);
 
-void crossOffSelfMatch(long rowId, long* startIndexes);
+void crossOffSelfMatch(const long rowId, const int* startIndexes, const int n, matrix_t distanceMatrix);
 
 #endif

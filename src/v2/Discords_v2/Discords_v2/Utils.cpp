@@ -68,7 +68,7 @@ double distance(double series1[], double series2[], long length)
 	return sum;
 }
 
-item_t min(series_t series)
+item_t min(const series_t series, const int length, int* position)
 {
 	item_t result = series[0];
 	for (long i = 0; i < n; i++)
@@ -81,7 +81,7 @@ item_t min(series_t series)
 	return result;
 }
 
-item_t max(series_t series)
+item_t max(const series_t series, const int length, int* position)
 {
 	item_t result = series[0];
 	for (long i = 0; i < n; i++)
