@@ -17,7 +17,7 @@ using namespace std;
 * @param p2 The second point.
 * @return The Euclidean distance.
 */
-double distance(double p1, double p2) {
+item_t distance(item_t p1, item_t p2) {
 	return sqrt((p1 - p2) * (p1 - p2));
 }
 
@@ -27,7 +27,7 @@ double distance(double p1, double p2) {
 * @param p2 The second point.
 * @return The Square of Euclidean distance.
 */
-double distance2(double p1, double p2) {
+item_t distance2(item_t p1, item_t p2) {
 	return (p1 - p2) * (p1 - p2);
 }
 
@@ -39,13 +39,15 @@ double distance2(double p1, double p2) {
 * @param length The length of series.
 * @return The Euclidean distance.
 */
-double distance2(double point1[], double point2[], long length)
+double distance2(const series_t series1, const series_t series2, const long length)
 {
 	assert(length > 0);
-	double sum = 0;
+	assert(series1 != NULL);
+	assert(series2 != NULL);
+	float sum = 0;
 	for (int i = 0; i < length; i++)
 	{
-		sum += distance2(point2[i], point1[i]);
+		sum += (series1[i] - series2[i]) * (series1[i] - series2[i]);
 	}
 	return sum;
 }
@@ -57,25 +59,26 @@ double distance2(double point1[], double point2[], long length)
 * @param length The length of series.
 * @return The eclidean distance.
 */
-double distance(double series1[], double series2[], long length)
+double distance(const series_t series1, const series_t series2, const long length)
 {
 	assert(length > 0);
-	double sum = 0;
+	float sum = 0;
 	for (int i = 0; i < length; i++)
 	{
-		sum += distance(series1[i], series2[i]);
+		sum += (series1[i] - series2[i]) * (series1[i] - series2[i]);
 	}
-	return sum;
+	return sqrt(sum);
 }
 
 item_t min(const series_t series, const int length, int* position)
 {
 	item_t result = series[0];
-	for (long i = 0; i < n; i++)
+	for (long i = 0; i < length; i++)
 	{
 		if (series[i] < result)
 		{
 			result = series[i];
+			*position = i;
 		}
 	}
 	return result;
@@ -84,11 +87,12 @@ item_t min(const series_t series, const int length, int* position)
 item_t max(const series_t series, const int length, int* position)
 {
 	item_t result = series[0];
-	for (long i = 0; i < n; i++)
+	for (long i = 0; i < length; i++)
 	{
 		if (series[i] > result)
 		{
 			result = series[i];
+			*position = i;
 		}
 	}
 	return result;

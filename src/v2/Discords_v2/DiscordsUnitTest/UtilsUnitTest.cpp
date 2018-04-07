@@ -125,9 +125,9 @@ namespace DiscordsUnitTest
 			{
 				timeSeries[i] = (float)i;
 			}
-			start();
+			startApp();
 			float eps = 0.001;
-			matrix_t result = createSubsequencies(timeSeries, 3);
+			matrix_t result = createSubsequencies(timeSeries, 7, 3);
 			for (int i = 0; i < 5; i++)
 			{
 				for (int j = 0; j < 3; j++)

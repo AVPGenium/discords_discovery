@@ -7,9 +7,10 @@ Interface of the algorithm.
 #ifndef DISCORDS_H
 #define DISCORDS_H
 
-typedef double ts_distance_t;
-typedef double ts_element_t;
-typedef unsigned long long ts_index_t;
+typedef float ts_distance_t;
+typedef float ts_element_t;
+//typedef unsigned long long ts_index_t;
+typedef int ts_index_t;
 typedef ts_element_t * ts_timeseries_t;
 
 typedef enum distance_kind {

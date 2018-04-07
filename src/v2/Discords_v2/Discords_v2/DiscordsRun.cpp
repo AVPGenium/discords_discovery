@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 #include "DiscordsRun.h"
 #include "Utils.h"
 #include "DistanceMatrix.h"
@@ -10,13 +11,13 @@ series_t timeSeries;
 
 
 // length of full time series
-int m;
+int _m;
 // length of one subsequence
-int n;
+int _n;
 
-void start()
+void startApp()
 {
-	m = 7;
+	_m = 7;
 }
 
 int* findSelfMatch(series_t timeSeries, long startIndex)
@@ -24,29 +25,39 @@ int* findSelfMatch(series_t timeSeries, long startIndex)
 	return 0;
 }
 
-void prepareConfig(const int _m, const int _n, const series_t T)
+void prepareConfig(const int m, const int n, const series_t T)
 {
-	m = _m;
-	n = _n;
+	_m = m;
+	_n = n;
 	timeSeries = T;
 }
 
 int findDiscord(const series_t T, const int m, const int n, float* bsf_dist)
 {
-	matrix_t timeSeriesSubsequences = createSubsequencies(T, n);
+	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
 	matrix_t distancies = createDistanceMatrix(m, n, timeSeriesSubsequences);
 	item_t* mins = new float[m - n + 1];
 	for (int i = 0; i < m - n + 1; i++)
 	{
 		int* selfMatchIndexes = findSelfMatch(m, n, i);
 		crossOffSelfMatch(i, selfMatchIndexes, m - n + 1 - countNonSelfMatchSubsequencies(m, n, i), distancies);
-		mins[i] =  findRowMinElement(i, n, distancies);
+		mins[i] =  findRowMinElement(i, m, n, distancies);
+	}
+	printf("\nAfter cross off: \n");
+	for (int i = 0; i < m - n + 1; i++)
+	{
+		for (int j = 0; j < m - n + 1; j++)
+		{
+			printf("%f ", distancies[i][j]);
+		}
+		printf("\n--------\n");
 	}
 	bsfDist = max(mins, n, &bsfPos);
-	return bsfDist;
+	*bsf_dist = bsfDist;
+	return bsfPos;
 }
 
-matrix_t createSubsequencies(const series_t T, const int n)
+matrix_t createSubsequencies(const series_t T, const int m, const int n)
 {
 	matrix_t result = new float* [m-n+1];
 	for (int i = 0; i < m - n + 1; i++)
@@ -102,6 +113,12 @@ int* findSelfMatch(int m, int n, long startIndex)
 			indexes[j] = i;
 		}
 	}
+	printf("\nSelf match for: %d\n", startIndex);
+	for (int i = 0; i < j; i++)
+	{
+		printf("%d ", indexes[i]);
+	}
+	printf("\n--------\n");
 	return indexes;
 }
 
@@ -119,4 +136,9 @@ int countNonSelfMatchSubsequencies(int m, int n, int p)
 		result += m - (p + n) - 1;
 	}
 	return result;
+}
+
+void prepareConfig()
+{
+
 }

@@ -74,10 +74,12 @@ Set parameters (manually or get them from command line).
 */
 void SetParameters(void)
 {
-	TIME_SERIES_LEN = 1 << 10;
+	//TIME_SERIES_LEN = 1 << 10;
+	TIME_SERIES_LEN = 1000;
 	assert(TIME_SERIES_LEN > 0);
 
-	n = 1 << 5;
+	//n = 1 << 5;
+	n = 10;
 	assert(n > 0 && n < TIME_SERIES_LEN);
 
 	D = EUQLID2;

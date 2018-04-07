@@ -8,17 +8,17 @@ extern float bsfDist;
 extern series_t timeSeries;
 
 // length of full time series
-extern int m;
+extern int _m;
 // length of one subsequence
-extern int n;
+extern int _n;
 
-void start();
+void startApp();
 
 void prepareConfig();
 
-int findDiscord(const series_t T,  const int n, float* bsf_dist);
+int findDiscord(const series_t T, const int m, const int n, float* bsf_dist);
 
-matrix_t createSubsequencies(const series_t T, const int n);
+matrix_t createSubsequencies(const series_t T, const int m, const int n);
 
 /**
 * Нахождения количества non-self-match подпоследовательностей

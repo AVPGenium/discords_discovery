@@ -21,8 +21,13 @@ int main()
 	{
 		timeSeries[i] = (float)i;
 	}
-	start();
-	matrix_t result = createSubsequencies(timeSeries, 3);
+	timeSeries[0] = 100;
+	timeSeries[1] = 100;
+	item_t dist_matrix_bsf_dist = 0;
+	int dist_matrix_loc = findDiscord(timeSeries, 10, 3, &dist_matrix_bsf_dist);
+	printf("%d %f", dist_matrix_loc, dist_matrix_bsf_dist);
+	/*startApp();
+	matrix_t result = createSubsequencies(timeSeries, 7, 3);
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 3; j++)
@@ -30,5 +35,5 @@ int main()
 			printf("%f ", result[i][j]);
 		}
 		printf("\n");
-	}
+	}*/
 }

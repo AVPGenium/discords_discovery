@@ -11,20 +11,20 @@
 #define NEG_INF -9999999999.0f
 
 /**
-* Calculates the Euclidean distance between two points.
-* @param p1 The first point.
-* @param p2 The second point.
-* @return The Euclidean distance.
-*/
-double distance(double p1, double p2);
+ * Calculates the Euclidean distance between two points.
+ * @param p1 The first point.
+ * @param p2 The second point.
+ * @return The Euclidean distance.
+ */
+item_t distance(item_t p1, item_t p2);
 
 /**
-* Calculates the square of the Euclidean distance between two 1D points represented by real values.
-* @param p1 The first point.
-* @param p2 The second point.
-* @return The Square of Euclidean distance.
-*/
-double distance2(double p1, double p2);
+ * Calculates the square of the Euclidean distance between two 1D points represented by real values.
+ * @param p1 The first point.
+ * @param p2 The second point.
+ * @return The Square of Euclidean distance.
+ */
+item_t distance2(item_t p1, item_t p2);
 
 /**
 * Calculates the square of the Euclidean distance between two single-dimensional timeseries represented
@@ -34,7 +34,7 @@ double distance2(double p1, double p2);
 * @param length The length of series.
 * @return The Euclidean distance.
 */
-double distance2(double point1[], double point2[], long length);
+double distance2(const series_t point1, const series_t point2, const long length);
 
 /**
 * Calculates Euclidean distance between two single-dimensional time-series of equal length.
@@ -43,7 +43,7 @@ double distance2(double point1[], double point2[], long length);
 * @param length The length of series.
 * @return The eclidean distance.
 */
-double distance(double series1[], double series2[], long length);
+double distance(const series_t series1, const series_t series2, const long length);
 
 item_t min(const series_t series, const int length, int* position);
 
