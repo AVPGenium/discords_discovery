@@ -52,7 +52,14 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist)
 		}
 		printf("\n--------\n");
 	}
-	bsfDist = max(mins, n, &bsfPos);
+	printf("\nMins: \n");
+	for (int i = 0; i < m - n + 1; i++)
+	{
+		printf("%f ", mins[i]);
+	}
+	printf("\n--------\n");
+	bsfDist = max(mins, m-n+1, &bsfPos);
+	printf("\nmax: %f\n", bsfDist);
 	*bsf_dist = bsfDist;
 	return bsfPos;
 }
@@ -133,7 +140,7 @@ int countNonSelfMatchSubsequencies(int m, int n, int p)
 	// подпоследовательностей после заданной
 	if (m - (p + n) >= n)
 	{
-		result += m - (p + n) - 1;
+		result += m - (p + n) - n + 1;
 	}
 	return result;
 }

@@ -79,7 +79,7 @@ void SetParameters(void)
 	assert(TIME_SERIES_LEN > 0);
 
 	//n = 1 << 5;
-	n = 10;
+	n = 100;
 	assert(n > 0 && n < TIME_SERIES_LEN);
 
 	D = EUQLID2;

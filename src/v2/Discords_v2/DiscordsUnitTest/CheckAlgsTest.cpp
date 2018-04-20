@@ -43,7 +43,8 @@ namespace DiscordsUnitTest
 			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
 
 			_aligned_free(T);
-
+			Assert::AreEqual(discord_loc, (ts_index_t)dist_matrix_loc);
+			Assert::AreEqual(bruteforce_bsf_dist, dist_matrix_bsf_dist);
 			Assert::AreEqual(bsf_loc, bruteforce_bsf_loc);
 			Assert::AreEqual(bsf_loc, (ts_index_t)dist_matrix_loc);
 		}

@@ -16,8 +16,8 @@ int main()
 	int* actual = findSelfMatch(5, 2, 0);
 	printf("%d - %d", expected[0], actual[0]);
 	printf("%d - %d", expected[1], actual[1]);*/
-	const series_t timeSeries = new float[7];
-	for (int i = 0; i < 7; i++)
+	const series_t timeSeries = new float[10];
+	for (int i = 0; i < 10; i++)
 	{
 		timeSeries[i] = (float)i;
 	}

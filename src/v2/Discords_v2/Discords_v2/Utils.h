@@ -7,8 +7,8 @@
 
 #include "Config.h"
 
-#define POS_INF 9999999999.0f
-#define NEG_INF -9999999999.0f
+#define POS_INF (1e20)
+#define NEG_INF -POS_INF
 
 /**
  * Calculates the Euclidean distance between two points.
