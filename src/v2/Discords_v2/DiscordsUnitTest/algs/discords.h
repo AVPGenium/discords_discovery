@@ -71,8 +71,27 @@ void SetParameters(void);
 /*
 Generate time series with discord
 */
-ts_element_t * GenerateRandomTimeSeries(void);
+ts_element_t * generateRandomTimeSeries(void);
 
+ts_element_t * generateRandomSinTimeSeries(void);
+
+ts_element_t * generateRandomSinTimeSeries(long discordLength);
+
+ts_element_t * generateRandomSinTimeSeries(long m, long n,  long discordLength);
+
+ts_element_t * generateRandomExpTimeSeries(void);
+
+ts_element_t * generateRandomExpTimeSeries(long discordLength);
+
+ts_element_t * generateRandomExpTimeSeries(long m, long n, long discordLength);
+
+ts_element_t * generateRandomLinearTimeSeries(void);
+
+ts_element_t * generateRandomLinearTimeSeries(long discordLength);
+
+ts_element_t * generateRandomLinearTimeSeries(long m, long n, long discordLength);
+
+ts_element_t * addDiscordsToTimeSeries(ts_element_t * T, long m, long discordLength);
 /*
 Make and output report on run.
 */

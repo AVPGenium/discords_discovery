@@ -100,10 +100,14 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <UseMSVC>true</UseMSVC>
+      <InterproceduralOptimization>MultiFile</InterproceduralOptimization>
+      <Parallelization>true</Parallelization>
+      <UseIntelOptimizedHeaders>false</UseIntelOptimizedHeaders>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,6 +159,7 @@
       <UseMSVC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</UseMSVC>
     </ClCompile>
     <ClCompile Include="DistanceMatrix.cpp" />
+    <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>

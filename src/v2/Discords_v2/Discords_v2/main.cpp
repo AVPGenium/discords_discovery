@@ -1,9 +1,25 @@
 #include "Utils.h"
 #include "Config.h"
+#include <assert.h>
 #include "DiscordsRun.h"
 #include <cstdio>
+#include <iostream>
 
-int main()
+using namespace std;
+
+int n;
+int m;
+char* path;
+
+/**
+ * Command line args:
+ * 1. m
+ * 2. path to time series [default, generate or URI]
+ * 3. n
+ */
+void parseCommandLineArgs(int argc, char *argv[]);
+
+int main(int argc, char *argv[])
 {
 	/*double point1 = 1.0;
 	double point2 = 1.0;
@@ -36,4 +52,15 @@ int main()
 		}
 		printf("\n");
 	}*/
+}
+
+void parseCommandLineArgs(int argc, char *argv[])
+{
+	std::cout << "There are " << argc << " arguments:\n";
+	// todo: different combinations of args
+	assert(argc == 3);
+	cout << "m = " << argv[0] << "; path = " << argv[1] << "; n = " << argv[2] << ";\n";
+	m = atoi(argv[0]);
+	path = argv[1];
+	n = atoi(argv[2]);
 }
