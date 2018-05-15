@@ -39,7 +39,7 @@ item_t distance2(item_t p1, item_t p2) {
 * @param length The length of series.
 * @return The Euclidean distance.
 */
-double distance2(const series_t series1, const series_t series2, const long length)
+item_t distance2(const series_t series1, const series_t series2, const long length)
 {
 	assert(length > 0);
 	assert(series1 != NULL);
@@ -59,7 +59,7 @@ double distance2(const series_t series1, const series_t series2, const long leng
 * @param length The length of series.
 * @return The eclidean distance.
 */
-double distance(const series_t series1, const series_t series2, const long length)
+item_t distance(const series_t series1, const series_t series2, const long length)
 {
 	assert(length > 0);
 	float sum = 0;
@@ -87,6 +87,7 @@ item_t min(const series_t series, const int length, int* position)
 item_t max(const series_t series, const int length, int* position)
 {
 	item_t result = series[0];
+
 	for (long i = 0; i < length; i++)
 	{
 		if (series[i] > result)

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<bag xmlns:int="http://www.w3.org/2001/XMLSchema#int" xmlns:unsignedLong="http://www.w3.org/2001/XMLSchema#unsignedLong">
+ <entry path="grouper" unsignedLong:size="6">
+  <indexFields>
+   <field path="dd_process"/>
+   <field path="barrier_data_attr_attribute"/>
+   <field path="barrier_data_scale"/>
+   <field path="elapsed_time_data_scale"/>
+   <field path="region_data_attr_bin_type"/>
+   <field path="region_data_scale"/>
+   <emptyField path="barrier_imbalance_data_scale" int:defaultValue="1"/>
+  </indexFields>
+  <int64Fields>
+   <field path="barrier_data_loop_iteration_count_max"/>
+   <field path="barrier_data_loop_iteration_count_min"/>
+   <field path="elapsed_time_data_duration"/>
+   <field path="region_data_duration"/>
+  </int64Fields>
+  <doubleFields>
+   <field path="barrier_data_inst_count"/>
+   <field path="barrier_data_loop_iteration_count"/>
+   <field path="region_data_inst_count"/>
+   <emptyField path="barrier_imbalance_data_count" int:defaultValue="0"/>
+  </doubleFields>
+ </entry>
+</bag>

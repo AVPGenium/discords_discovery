@@ -1,5 +1,7 @@
 /**
+* Parallel discords search algorithm for Intel Xeon Phi architecture
 * Utility methods for algorithm
+* (c) 2018 Mikhail Zymbler, Andrei Poliakov
 */
 
 #ifndef UTILS_H
@@ -8,7 +10,7 @@
 #include "Config.h"
 
 #define POS_INF (1e20)
-#define NEG_INF -POS_INF
+#define NEG_INF -(POS_INF)
 
 /**
  * Calculates the Euclidean distance between two points.
@@ -34,17 +36,23 @@ item_t distance2(item_t p1, item_t p2);
 * @param length The length of series.
 * @return The Euclidean distance.
 */
-double distance2(const series_t point1, const series_t point2, const long length);
+item_t distance2(const series_t point1, const series_t point2, const long length);
 
 /**
 * Calculates Euclidean distance between two single-dimensional time-series of equal length.
-* @param series1 The first series.
-* @param series2 The second series.
-* @param length The length of series.
+* @input series1 The first series.
+* @input series2 The second series.
+* @input length The length of series.
 * @return The eclidean distance.
 */
-double distance(const series_t series1, const series_t series2, const long length);
+item_t distance(const series_t series1, const series_t series2, const long length);
 
+/**
+ * Finding min element in vector
+ * @input series vector of data.
+ * @input length The length of vector.
+ * @output position 
+ */
 item_t min(const series_t series, const int length, int* position);
 
 item_t max(const series_t series, const int length, int* position);

@@ -1,0 +1,15 @@
+-r
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\My Amplifier Results - Discords_v2\r001hs
+--stack-stitching
+--data-limit-mb=500
+--disk-space-limit=0
+--mrte-type=java,dotnet,python
+--itt-config=openmp
+--itt-config=frame
+--stackwalk=offline
+--mrte-mode=auto
+--type=cpu:counters:nostack
+--type=cpu:stack
+--interval=10
+--
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\x64\Debug\Discords_v2.exe

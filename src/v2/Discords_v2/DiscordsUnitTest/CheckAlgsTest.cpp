@@ -40,6 +40,8 @@ namespace DiscordsUnitTest
 			bruteforce_bsf_loc = BruteForceDiscordSearch(T, n, &bruteforce_bsf_dist);
 
 			float dist_matrix_bsf_dist;
+			int threadsNum = 4;
+			long time = 0;
 			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
 
 			_aligned_free(T);
@@ -72,8 +74,10 @@ namespace DiscordsUnitTest
 			bsf_loc = DiscordSearch(T, n, &bsf_dist);
 
 			bruteforce_bsf_loc = BruteForceDiscordSearch(T, n, &bruteforce_bsf_dist);
-
+	
 			float dist_matrix_bsf_dist;
+			int threadsNum = 4;
+			long time = 0;
 			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
 
 			_aligned_free(T);
@@ -108,6 +112,8 @@ namespace DiscordsUnitTest
 			bruteforce_bsf_loc = BruteForceDiscordSearch(T, n, &bruteforce_bsf_dist);
 
 			float dist_matrix_bsf_dist;
+			int threadsNum = 4;
+			long time = 0;
 			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
 
 			_aligned_free(T);

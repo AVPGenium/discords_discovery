@@ -1,0 +1,41 @@
+
+=== Start: [2018/05/15 01:51:02] === 
+Analysis started...
+Result file: F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\My Advisor Results - Discords_v2\e000\mp000\mp000.advixe 
+Found target process f:\users\admin\documents\discords_discovery\src\v2\discords_v2\x64\debug\discords_v2.exe (PID = 8088). Analysis started... 
+Loaded module: f:\windows\system32\kernel32.dll. 
+Loaded module: f:\windows\system32\ntdll.dll. 
+Loaded module: f:\users\admin\documents\discords_discovery\src\v2\discords_v2\x64\debug\discords_v2.exe. 
+Loaded module: f:\windows\system32\kernelbase.dll. 
+Loaded module: f:\windows\system32\msvcp140d.dll. 
+Loaded module: f:\windows\system32\vcruntime140d.dll. 
+Loaded module: f:\windows\system32\ucrtbased.dll. 
+Loaded module: f:\windows\system32\api-ms-win-core-timezone-l1-1-0.dll. 
+Loaded module: f:\windows\system32\api-ms-win-core-file-l2-1-0.dll. 
+Loaded module: f:\windows\system32\api-ms-win-core-localization-l1-2-0.dll. 
+Loaded module: f:\windows\system32\api-ms-win-core-synch-l1-2-0.dll. 
+Loaded module: f:\windows\system32\api-ms-win-core-processthreads-l1-1-1.dll. 
+Loaded module: f:\windows\system32\api-ms-win-core-file-l1-2-0.dll. 
+Loaded module: c:\program files\intelswtools\compilers_and_libraries_2018\windows\redist\intel64\compiler\libiomp5md.dll. 
+Loaded module: c:\program files\intelswtools\advisor 2018\bin64\runtime\libittnotify.dll. 
+Unloaded module: f:\windows\system32\kernel32.dll. 
+Unloaded module: f:\windows\system32\ntdll.dll. 
+Unloaded module: f:\users\admin\documents\discords_discovery\src\v2\discords_v2\x64\debug\discords_v2.exe. 
+Unloaded module: f:\windows\system32\kernelbase.dll. 
+Unloaded module: f:\windows\system32\msvcp140d.dll. 
+Unloaded module: f:\windows\system32\vcruntime140d.dll. 
+Unloaded module: f:\windows\system32\ucrtbased.dll. 
+Unloaded module: f:\windows\system32\api-ms-win-core-timezone-l1-1-0.dll. 
+Unloaded module: f:\windows\system32\api-ms-win-core-file-l2-1-0.dll. 
+Unloaded module: f:\windows\system32\api-ms-win-core-localization-l1-2-0.dll. 
+Unloaded module: f:\windows\system32\api-ms-win-core-synch-l1-2-0.dll. 
+Unloaded module: f:\windows\system32\api-ms-win-core-processthreads-l1-1-1.dll. 
+Unloaded module: f:\windows\system32\api-ms-win-core-file-l1-2-0.dll. 
+Unloaded module: c:\program files\intelswtools\compilers_and_libraries_2018\windows\redist\intel64\compiler\libiomp5md.dll. 
+Unloaded module: c:\program files\intelswtools\advisor 2018\bin64\runtime\libittnotify.dll. 
+Process f:\users\admin\documents\discords_discovery\src\v2\discords_v2\x64\debug\discords_v2.exe (PID = 8088) has terminated. 
+Warning: No SITE annotations were encountered, so no stride/alignment data can be reported. 
+Application exit code: 0 
+Result file: F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\My Advisor Results - Discords_v2\e000\mp000\mp000.advixe 
+Analysis completed
+=== End: [2018/05/15 01:51:11] === 

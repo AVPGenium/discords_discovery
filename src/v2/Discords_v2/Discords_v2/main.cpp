@@ -40,8 +40,10 @@ int main(int argc, char *argv[])
 	timeSeries[0] = 100;
 	timeSeries[1] = 100;
 	item_t dist_matrix_bsf_dist = 0;
-	int dist_matrix_loc = findDiscord(timeSeries, 10, 3, &dist_matrix_bsf_dist);
-	printf("%d %f", dist_matrix_loc, dist_matrix_bsf_dist);
+	int threadsNum = 4;
+	long time = 0;
+	int dist_matrix_loc = findDiscord(timeSeries, 10, 3, &dist_matrix_bsf_dist, threadsNum, &time);
+	printf("%d %f %ld", dist_matrix_loc, dist_matrix_bsf_dist, time);
 	/*startApp();
 	matrix_t result = createSubsequencies(timeSeries, 7, 3);
 	for (int i = 0; i < 5; i++)

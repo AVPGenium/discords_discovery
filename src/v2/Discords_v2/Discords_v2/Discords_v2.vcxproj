@@ -103,12 +103,13 @@
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <UseMSVC>true</UseMSVC>
+      <UseMSVC>false</UseMSVC>
       <InterproceduralOptimization>MultiFile</InterproceduralOptimization>
       <Parallelization>true</Parallelization>
       <UseIntelOptimizedHeaders>false</UseIntelOptimizedHeaders>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <OpenMP>GenerateParallelCode</OpenMP>
+      <EnableExpandedLineNumberInfo>true</EnableExpandedLineNumberInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="debugger.h" />
     <ClInclude Include="DiscordsRun.h" />
     <ClInclude Include="DistanceMatrix.h" />
     <ClInclude Include="FileUtils.h" />

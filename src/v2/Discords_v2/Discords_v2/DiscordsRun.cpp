@@ -34,31 +34,42 @@ void prepareConfig(const int m, const int n, const series_t T)
 /**
 * Нахождение диссонанса заданной длины в данном временном ряде
 * для заданной подпоследовательности
-* @param T - временной ряд
-* @param m - длина временного ряда
-* @param n - длина подпоследовательности
-* @param bsf_dist - расстояние до ближайшего соседа
+* @input T - временной ряд
+* @input m - длина временного ряда
+* @input n - длина подпоследовательности
+* @output bsf_dist - расстояние до ближайшего соседа
+* @input threadNum - кол-во потоков, на которых запускается алгоритм
+* @output time - время затраченное на выполнение алгоритма
+* @return индекс начала диссонанса
 * @return индекс начала диссонанса
 */
-int findDiscord(const series_t T, const int m, const int n, float* bsf_dist)
+int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, long* time)
 {
 	// create matrix of subsequencies
 	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
 	// calc distance matrix
+	double start = omp_get_wtime();
 	matrix_t distancies = createDistanceMatrix(m, n, timeSeriesSubsequences);
+	double end = omp_get_wtime();
+	*time += (end - start);
 	item_t* mins = (item_t*)__align_malloc((m - n + 1) * sizeof(item_t));
 	omp_set_nested(true);
+	int* selfMatchIndexes = (int*)__align_malloc((m - n + 1) * sizeof(item_t));
+	start = omp_get_wtime();
 	// for each row in distance matrix find min element
-	#pragma omp parallel for schedule(guided,1)
-	for (int i = 0; i < m - n + 1; i++)
+	#pragma omp parallel if(threadNum > 1) num_threads(threadNum) shared(mins, distancies)
 	{
-		int* selfMatchIndexes = findSelfMatch(m, n, i);
-		int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, i);
-		int count = m - n + 1 - countNonSelfMatch;
-		crossOffSelfMatch(i, selfMatchIndexes, count, distancies);
-		mins[i] =  findRowMinElement(i, m, n, distancies);
+			#pragma omp for firstprivate(selfMatchIndexes)
+			for (int i = 0; i < m - n + 1; i++)
+			{
+				int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, i);
+				int count = m - n + 1 - countNonSelfMatch;
+				selfMatchIndexes = findSelfMatch(m, n, i);
+				crossOffSelfMatch(i, selfMatchIndexes, count, distancies);
+				mins[i] = findRowMinElement(i, m, n, distancies);
+			}
 	}
-	printf("\nAfter cross off: \n");
+	/*printf("\nAfter cross off: \n");
 	for (int i = 0; i < m - n + 1; i++)
 	{
 		for (int j = 0; j < m - n + 1; j++)
@@ -72,9 +83,11 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist)
 	{
 		printf("%f ", mins[i]);
 	}
-	printf("\n--------\n");
+	printf("\n--------\n");*/
 	bsfDist = max(mins, m-n+1, &bsfPos);
-	printf("\nmax: %f\n", bsfDist);
+	end = omp_get_wtime();
+	*time += (end - start);
+	//printf("\nmax: %f\n", bsfDist);
 	*bsf_dist = bsfDist;
 	return bsfPos;
 }
@@ -151,12 +164,12 @@ int* findSelfMatch(int m, int n, long startIndex)
 			indexes[j] = i;
 		}
 	}
-	printf("\nSelf match for: %d\n", startIndex);
+	/*printf("\nSelf match for: %d\n", startIndex);
 	for (int i = 0; i < j; i++)
 	{
 		printf("%d ", indexes[i]);
 	}
-	printf("\n--------\n");
+	printf("\n--------\n");*/
 	return indexes;
 }
 
