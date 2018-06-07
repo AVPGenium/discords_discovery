@@ -6,3 +6,15 @@ See "https://software.intel.com/en-us/intel-advisor-xe" for details.
     Report from: OpenMP optimizations [openmp]
 
 F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(60,2):remark #16201: OpenMP DEFINED REGION WAS PARALLELIZED
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(17,2):remark #16200: OpenMP DEFINED LOOP WAS PARALLELIZED
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(32,2):remark #16201: OpenMP DEFINED REGION WAS PARALLELIZED
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(48,2):remark #16200: OpenMP DEFINED LOOP WAS PARALLELIZED

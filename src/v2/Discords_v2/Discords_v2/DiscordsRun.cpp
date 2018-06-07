@@ -43,7 +43,7 @@ void prepareConfig(const int m, const int n, const series_t T)
 * @return индекс начала диссонанса
 * @return индекс начала диссонанса
 */
-int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, long* time)
+int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, double* time)
 {
 	// create matrix of subsequencies
 	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
@@ -54,40 +54,38 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 	*time += (end - start);
 	item_t* mins = (item_t*)__align_malloc((m - n + 1) * sizeof(item_t));
 	omp_set_nested(true);
-	int* selfMatchIndexes = (int*)__align_malloc((m - n + 1) * sizeof(item_t));
+	/*int** selfMatchIndexes = (int**)__align_malloc((m - n + 1) * sizeof(int*));
+	for (int i = 0; i < m - n + 1; i++)
+	{
+		selfMatchIndexes[i] = (int*)__align_malloc((3*n) * sizeof(int));
+		assert(selfMatchIndexes[i] != NULL);
+	}
+	int* countSelfMatch = (int*)__align_malloc((m - n + 1) * sizeof(int));
+	#pragma omp parallel if(threadNum > 1) num_threads(threadNum) shared(countSelfMatch)
+	{
+		#pragma omp for
+		for (int i = 0; i < m - n + 1; i++)
+		{
+			int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, i);
+			int count = m - n + 1 - countNonSelfMatch;
+			countSelfMatch[i] = count;
+		}
+	}*/
 	start = omp_get_wtime();
 	// for each row in distance matrix find min element
 	#pragma omp parallel if(threadNum > 1) num_threads(threadNum) shared(mins, distancies)
 	{
-			#pragma omp for firstprivate(selfMatchIndexes)
+			#pragma omp for
 			for (int i = 0; i < m - n + 1; i++)
 			{
-				int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, i);
-				int count = m - n + 1 - countNonSelfMatch;
-				selfMatchIndexes = findSelfMatch(m, n, i);
-				crossOffSelfMatch(i, selfMatchIndexes, count, distancies);
+				//findSelfMatch(m, n, i, selfMatchIndexes);
+				//crossOffSelfMatch(i, selfMatchIndexes[i], countSelfMatch[i], distancies);
 				mins[i] = findRowMinElement(i, m, n, distancies);
 			}
 	}
-	/*printf("\nAfter cross off: \n");
-	for (int i = 0; i < m - n + 1; i++)
-	{
-		for (int j = 0; j < m - n + 1; j++)
-		{
-			printf("%f ", distancies[i][j]);
-		}
-		printf("\n--------\n");
-	}
-	printf("\nMins: \n");
-	for (int i = 0; i < m - n + 1; i++)
-	{
-		printf("%f ", mins[i]);
-	}
-	printf("\n--------\n");*/
 	bsfDist = max(mins, m-n+1, &bsfPos);
 	end = omp_get_wtime();
 	*time += (end - start);
-	//printf("\nmax: %f\n", bsfDist);
 	*bsf_dist = bsfDist;
 	return bsfPos;
 }
@@ -125,19 +123,19 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n)
 * @param p - индекс начала подпоследовательности
 * @return количество non-self-match подпоследовательностей
 */
-int* findSelfMatch(int m, int n, long startIndex)
+int* findSelfMatch(int m, int n, long startIndex, int** selfMatchIndexes)
 {
-	int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, startIndex);
+	/*int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, startIndex);
 	int count = m - n + 1 - countNonSelfMatch;
 	int* indexes = (int*)__align_malloc(count * sizeof(int));
-	assert(indexes != NULL);
+	assert(indexes != NULL);*/
 	int j = 0;
 	if (startIndex < n)
 	{
 		#pragma omp for 
 		for (int i = 0; i < startIndex; i++, j++)
 		{
-			indexes[j] = i;
+			selfMatchIndexes[startIndex][j] = i;
 		}
 	}
 	else
@@ -145,7 +143,7 @@ int* findSelfMatch(int m, int n, long startIndex)
 		#pragma omp for 
 		for (int i = startIndex - n + 1; i < startIndex; i++, j++)
 		{
-			indexes[j] = i;
+			selfMatchIndexes[startIndex][j] = i;
 		}
 	}
 	if (m - (startIndex + n) < n)
@@ -153,7 +151,7 @@ int* findSelfMatch(int m, int n, long startIndex)
 		#pragma omp for 
 		for (int i = startIndex; i < m - n + 1; i++, j++)
 		{
-			indexes[j] = i;
+			selfMatchIndexes[startIndex][j] = i;
 		}
 	}
 	else
@@ -161,16 +159,10 @@ int* findSelfMatch(int m, int n, long startIndex)
 		#pragma omp for 
 		for (int i = startIndex; i < startIndex + n; i++, j++)
 		{
-			indexes[j] = i;
+			selfMatchIndexes[startIndex][j] = i;
 		}
 	}
-	/*printf("\nSelf match for: %d\n", startIndex);
-	for (int i = 0; i < j; i++)
-	{
-		printf("%d ", indexes[i]);
-	}
-	printf("\n--------\n");*/
-	return indexes;
+	return selfMatchIndexes[startIndex];
 }
 
 /**

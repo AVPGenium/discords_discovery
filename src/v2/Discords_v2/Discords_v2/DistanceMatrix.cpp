@@ -19,10 +19,15 @@ matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSub
 	{
 		for (int j = 0; j < m - n + 1; j++)
 		{
-			distancies[i][j] = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
-			//printf("%f ", distancies[i][j]);
+			if(j <= i - n || j >= i + n)
+			{
+				distancies[i][j] = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
+			}
+			else
+			{
+				distancies[i][j] = POS_INF;
+			}
 		}
-		//printf("\n--------\n");
 	}
 	return distancies;
 }

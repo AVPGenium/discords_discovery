@@ -33,7 +33,7 @@ void prepareConfig();
 * @output time - время затраченное на выполнение алгоритма
 * @return индекс начала диссонанса
 */
-int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, long* time);
+int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, double* time);
 
 /**
 * Создание матрицы подпоследовательностей
@@ -53,7 +53,7 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n);
 * @param p - индекс начала подпоследовательности
 * @return количество non-self-match подпоследовательностей
 */
-int* findSelfMatch(int m, int n, long startIndex);
+int* findSelfMatch(int m, int n, long startIndex, int** selfMatchIndexes);
 
 /**
  * Нахождения количества non-self-match подпоследовательностей
