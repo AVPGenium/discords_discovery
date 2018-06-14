@@ -41,14 +41,14 @@ int main(int argc, char *argv[])
 		series = readTimeSeries(path, m);
 	}
 	int nums[] = {1, 1, 2, 4, 8, 16, 32 };
-	for (int i = 0; i < 7; i++)
-	{
+	/*for (int i = 0; i < 7; i++)
+	{*/
 		item_t dist_matrix_bsf_dist = 0;
 		double time = 0;
-		int dist_matrix_loc = findDiscord(series, m, n, &dist_matrix_bsf_dist, nums[i], &time);
-		writeResult(dist_matrix_loc, dist_matrix_bsf_dist, time, nums[i]);
-		//printf("%d %f %f %d", dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
-	}
+		int dist_matrix_loc = findDiscord(series, m, n, &dist_matrix_bsf_dist, threadsNum, &time);
+		writeResult(dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
+		printf("%d %f %f %d", dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
+	//}
 	//printf("%d %f %f", dist_matrix_loc, dist_matrix_bsf_dist, time);
 }
 

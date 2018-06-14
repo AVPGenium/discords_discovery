@@ -1,0 +1,387 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINING OPTION VALUES:
+  -Qinline-factor: 100
+  -Qinline-min-size: 30
+  -Qinline-max-size: 230
+  -Qinline-max-total-size: 2000
+  -Qinline-max-per-routine: 10000
+  -Qinline-max-per-compile: 500000
+
+
+Begin optimization report for: startApp()
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(22,1):INLINE REPORT START:(startApp()) [1]
+INLINE REPORT END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(22,1):remark #34051: REGISTER ALLOCATION : [?startApp@@YAXXZ] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:22
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :    0[ reg_null]
+        
+    Routine temporaries
+        Total         :      18
+            Global    :       0
+            Local     :      18
+        Regenerable   :       0
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: prepareConfig(int, int, series_t)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(28,1):INLINE REPORT START:(prepareConfig(int, int, series_t)) [2]
+INLINE REPORT END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(28,1):remark #34051: REGISTER ALLOCATION : [?prepareConfig@@YAXHHQEAM@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:28
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :    3[ rdx rcx r8]
+        
+    Routine temporaries
+        Total         :      24
+            Global    :       0
+            Local     :      24
+        Regenerable   :       0
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: findDiscord(series_t, int, int, float *, int, double *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(47,1):INLINE REPORT START:(findDiscord(series_t, int, int, float *, int, double *)) [3]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(49,36):(1)-> INLINE: createSubsequencies(series_t, int, int)
+INLINE REPORT END
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(56,2):remark #16201: OpenMP DEFINED REGION WAS PARALLELIZED
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(83,2) inlined into F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(49,36)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(83,2):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(86,3):remark #15520: loop was not vectorized: loop with multiple exits cannot be vectorized unless it meets search loop idiom criteria
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(88,2) inlined into F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(49,36)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(88,2):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(90,3):remark #15527: loop was not vectorized: function call to memcpy(void *, const void *, size_t) cannot be vectorized
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(59,4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(59,4):remark #17102: loop was not parallelized: not a parallelization candidate
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(59,4):remark #15521: loop was not vectorized: loop control variable was not identified. Explicitly compute the iteration count before executing the loop or try using canonical loop form from OpenMP specification
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(58,4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(58,4):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(58,4):remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(90,3):remark #34026: call to memcpy implemented as a call to optimized library version
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(47,1):remark #34051: REGISTER ALLOCATION : [?findDiscord@@YAHQEAMHHPEAMHPEAN@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:47
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :   17[ rax rdx rcx rbx rbp rsi rdi r8-r15 zmm0 zmm15]
+        
+    Routine temporaries
+        Total         :     234
+            Global    :      86
+            Local     :     148
+        Regenerable   :      65
+        Spilled       :      16
+        
+    Routine stack
+        Variables     :      40 bytes*
+            Reads     :      11 [2.00e+000 ~ 0.5%]
+            Writes    :       9 [2.30e+001 ~ 5.4%]
+        Spills        :      24 bytes*
+            Reads     :       2 [1.90e+000 ~ 0.4%]
+            Writes    :       2 [1.90e+000 ~ 0.4%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: createSubsequencies(series_t, int, int)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(80,1):INLINE REPORT START:(createSubsequencies(series_t, int, int)) [4]
+INLINE REPORT END
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(83,2)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(83,2):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(86,3):remark #15520: loop was not vectorized: loop with multiple exits cannot be vectorized unless it meets search loop idiom criteria
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(88,2)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(88,2):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(90,3):remark #15527: loop was not vectorized: function call to memcpy(void *, const void *, size_t) cannot be vectorized
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(90,3):remark #34026: call to memcpy implemented as a call to optimized library version
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(80,1):remark #34051: REGISTER ALLOCATION : [?createSubsequencies@@YAPEAPEAMQEAMHH@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:80
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :    9[ rax rdx rcx rbp r8 r12-r15]
+        
+    Routine temporaries
+        Total         :      56
+            Global    :      31
+            Local     :      25
+        Regenerable   :      13
+        Spilled       :       5
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: findSelfMatch(int, int, long, int **)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(105,1):INLINE REPORT START:(findSelfMatch(int, int, long, int **)) [5]
+INLINE REPORT END
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3):remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3):remark #15346: vector dependence: assumed FLOW dependence between selfMatchIndexes[startIndex][j] (116:4) and selfMatchIndexes[startIndex] (116:4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3):remark #25439: unrolled with remainder by 2  
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3)
+Remainder
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(114,3):remark #25456: Number of Array Refs Scalar Replaced In Loop: 1
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3):remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3):remark #15346: vector dependence: assumed FLOW dependence between selfMatchIndexes[startIndex][j] (124:4) and selfMatchIndexes[startIndex] (124:4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3):remark #25439: unrolled with remainder by 2  
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3)
+Remainder
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(122,3):remark #25456: Number of Array Refs Scalar Replaced In Loop: 1
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(130,3)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(130,3):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(130,3):remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(130,3):remark #15346: vector dependence: assumed FLOW dependence between selfMatchIndexes[startIndex][j] (132:4) and selfMatchIndexes[startIndex] (132:4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(130,3):remark #25439: unrolled with remainder by 2  
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(130,3)
+Remainder
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(138,3)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(138,3):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(138,3):remark #15344: loop was not vectorized: vector dependence prevents vectorization. First dependence is shown below. Use level 5 report for details
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(138,3):remark #15346: vector dependence: assumed FLOW dependence between selfMatchIndexes[startIndex][j] (140:4) and selfMatchIndexes[startIndex] (140:4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(138,3):remark #25439: unrolled with remainder by 2  
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(138,3)
+Remainder
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(105,1):remark #34051: REGISTER ALLOCATION : [?findSelfMatch@@YAPEAHHHJPEAPEAH@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:105
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :   12[ rax rdx rcx rbx rbp rsi r8-r11 r14-r15]
+        
+    Routine temporaries
+        Total         :     100
+            Global    :      42
+            Local     :      58
+        Regenerable   :       1
+        Spilled       :       5
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+        Spills        :      16 bytes*
+            Reads     :       2 [9.00e-001 ~ 0.6%]
+            Writes    :       2 [9.00e-001 ~ 0.6%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: countNonSelfMatchSubsequencies(int, int, int)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(155,1):INLINE REPORT START:(countNonSelfMatchSubsequencies(int, int, int)) [6]
+INLINE REPORT END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(155,1):remark #34051: REGISTER ALLOCATION : [?countNonSelfMatchSubsequencies@@YAHHHH@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:155
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :    6[ rax rdx rcx r8-r10]
+        
+    Routine temporaries
+        Total         :      35
+            Global    :       0
+            Local     :      35
+        Regenerable   :       1
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: prepareConfig()
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(172,1):INLINE REPORT START:(prepareConfig()) [7]
+INLINE REPORT END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp(172,1):remark #34051: REGISTER ALLOCATION : [?prepareConfig@@YAXXZ] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DiscordsRun.cpp:172
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :    0[ reg_null]
+        
+    Routine temporaries
+        Total         :      18
+            Global    :       0
+            Local     :      18
+        Regenerable   :       0
+        Spilled       :       0
+        
+    Routine stack
+        Variables     :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+        Spills        :       0 bytes*
+            Reads     :       0 [0.00e+000 ~ 0.0%]
+            Writes    :       0 [0.00e+000 ~ 0.0%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================

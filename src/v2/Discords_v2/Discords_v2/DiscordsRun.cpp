@@ -48,43 +48,22 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 	// create matrix of subsequencies
 	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
 	// calc distance matrix
-	double start = omp_get_wtime();
-	matrix_t distancies = createDistanceMatrix(m, n, timeSeriesSubsequences);
-	double end = omp_get_wtime();
-	*time += (end - start);
+	matrix_t distancies = createDistanceMatrix(m, n, timeSeriesSubsequences, threadNum, time);
 	item_t* mins = (item_t*)__align_malloc((m - n + 1) * sizeof(item_t));
 	omp_set_nested(true);
-	/*int** selfMatchIndexes = (int**)__align_malloc((m - n + 1) * sizeof(int*));
-	for (int i = 0; i < m - n + 1; i++)
-	{
-		selfMatchIndexes[i] = (int*)__align_malloc((3*n) * sizeof(int));
-		assert(selfMatchIndexes[i] != NULL);
-	}
-	int* countSelfMatch = (int*)__align_malloc((m - n + 1) * sizeof(int));
-	#pragma omp parallel if(threadNum > 1) num_threads(threadNum) shared(countSelfMatch)
-	{
-		#pragma omp for
-		for (int i = 0; i < m - n + 1; i++)
-		{
-			int countNonSelfMatch = countNonSelfMatchSubsequencies(m, n, i);
-			int count = m - n + 1 - countNonSelfMatch;
-			countSelfMatch[i] = count;
-		}
-	}*/
-	start = omp_get_wtime();
+	double start = omp_get_wtime();
+	int countOfSubseq = m - n + 1;
 	// for each row in distance matrix find min element
 	#pragma omp parallel if(threadNum > 1) num_threads(threadNum) shared(mins, distancies)
 	{
 			#pragma omp for
-			for (int i = 0; i < m - n + 1; i++)
+			for (int i = 0; i < countOfSubseq; i++)
 			{
-				//findSelfMatch(m, n, i, selfMatchIndexes);
-				//crossOffSelfMatch(i, selfMatchIndexes[i], countSelfMatch[i], distancies);
-				mins[i] = findRowMinElement(i, m, n, distancies);
+				mins[i] = findRowMinElement(i, m, n, distancies, threadNum);
 			}
 	}
-	bsfDist = max(mins, m-n+1, &bsfPos);
-	end = omp_get_wtime();
+	bsfDist = max(mins, countOfSubseq, &bsfPos);
+	double end = omp_get_wtime();
 	*time += (end - start);
 	*bsf_dist = bsfDist;
 	return bsfPos;

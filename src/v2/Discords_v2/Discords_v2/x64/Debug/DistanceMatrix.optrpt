@@ -1,0 +1,202 @@
+Intel(R) Advisor can now assist with vectorization and show optimization
+  report messages with your source code.
+See "https://software.intel.com/en-us/intel-advisor-xe" for details.
+
+
+    Report from: Interprocedural optimizations [ipo]
+
+INLINING OPTION VALUES:
+  -Qinline-factor: 100
+  -Qinline-min-size: 30
+  -Qinline-max-size: 276
+  -Qinline-max-total-size: 2000
+  -Qinline-max-per-routine: 10000
+  -Qinline-max-per-compile: 500000
+
+
+Begin optimization report for: createDistanceMatrix(long, long, matrix_t, int, double *)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(10,1):INLINE REPORT START:(createDistanceMatrix(long, long, matrix_t, int, double *)) [1]
+INLINE REPORT END
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(20,3):remark #16200: OpenMP DEFINED LOOP WAS PARALLELIZED
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(14,2)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(14,2):remark #17102: loop was not parallelized: not a parallelization candidate
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(14,2):remark #15523: loop was not vectorized: loop control variable i was found, but loop iteration count cannot be computed before executing the loop
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(21,3)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(21,3):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(21,3):remark #15301: OpenMP SIMD LOOP WAS VECTORIZED
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(23,4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(23,4):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(23,4):remark #15548: loop was vectorized along with the outer loop
+LOOP END
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(21,3)
+Remainder loop for vectorization
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(23,4)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(23,4):remark #25460: No loop optimizations reported
+LOOP END
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(10,1):remark #34051: REGISTER ALLOCATION : [?createDistanceMatrix@@YAPEAPEAMJJPEAPEAMHPEAN@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp:10
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :   31[ rax rdx rcx rbx rbp rsi rdi r8-r15 zmm0-zmm15]
+        
+    Routine temporaries
+        Total         :     290
+            Global    :     119
+            Local     :     171
+        Regenerable   :      55
+        Spilled       :      36
+        
+    Routine stack
+        Variables     :      32 bytes*
+            Reads     :       8 [1.14e+001 ~ 0.8%]
+            Writes    :       7 [2.23e+001 ~ 1.6%]
+        Spills        :     328 bytes*
+            Reads     :      38 [8.58e+001 ~ 6.2%]
+            Writes    :      35 [2.69e+001 ~ 1.9%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: findRowMinElement(long, long, long, matrix_t)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(41,1):INLINE REPORT START:(findRowMinElement(long, long, long, matrix_t)) [2]
+INLINE REPORT END
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(45,2):remark #16201: OpenMP DEFINED REGION WAS PARALLELIZED
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(47,3)
+Peeled loop for vectorization
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(47,3)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(47,3):remark #17108: loop was not parallelized: insufficient computational work
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(47,3):remark #15301: OpenMP SIMD LOOP WAS VECTORIZED
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(47,3)
+Remainder loop for vectorization
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(41,1):remark #34051: REGISTER ALLOCATION : [?findRowMinElement@@YAMJJJQEAPEAM@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp:41
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :   16[ rax rdx rcx rbx rsi r8-r12 r14-r15 zmm0-zmm3]
+        
+    Routine temporaries
+        Total         :     202
+            Global    :      65
+            Local     :     137
+        Regenerable   :      55
+        Spilled       :       5
+        
+    Routine stack
+        Variables     :      36 bytes*
+            Reads     :       7 [9.95e-001 ~ 0.3%]
+            Writes    :      11 [2.38e+001 ~ 6.9%]
+        Spills        :      40 bytes*
+            Reads     :       5 [0.00e+000 ~ 0.0%]
+            Writes    :       5 [4.97e+000 ~ 1.4%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================
+
+Begin optimization report for: crossOffSelfMatch(long, const int *, int, matrix_t)
+
+    Report from: Interprocedural optimizations [ipo]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(60,1):INLINE REPORT START:(crossOffSelfMatch(long, const int *, int, matrix_t)) [3]
+INLINE REPORT END
+
+    Report from: OpenMP optimizations [openmp]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(61,2):remark #16200: OpenMP DEFINED LOOP WAS PARALLELIZED
+
+    Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
+
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(61,2)
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(61,2):remark #17104: loop was not parallelized: existence of parallel dependence
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(61,2):remark #15335: loop was not vectorized: vectorization possible but seems inefficient. Use vector always directive or /Qvec-threshold0 to override
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(61,2):remark #25439: unrolled with remainder by 2  
+LOOP END
+
+LOOP BEGIN at F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(61,2)
+Remainder
+LOOP END
+
+    Report from: Code generation optimizations [cg]
+
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp(60,1):remark #34051: REGISTER ALLOCATION : [?crossOffSelfMatch@@YAXJPEBHHPEAPEAM@Z] F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\DistanceMatrix.cpp:60
+
+    Hardware registers
+        Reserved     :    2[ rsp rip]
+        Available    :   39[ rax rdx rcx rbx rbp rsi rdi r8-r15 mm0-mm7 zmm0-zmm15]
+        Callee-save  :   18[ rbx rbp rsi rdi r12-r15 xmm6-xmm15]
+        Assigned     :   13[ rax rdx rcx rbx rbp rsi r8-r14]
+        
+    Routine temporaries
+        Total         :     131
+            Global    :      58
+            Local     :      73
+        Regenerable   :      37
+        Spilled       :       6
+        
+    Routine stack
+        Variables     :      20 bytes*
+            Reads     :       4 [0.00e+000 ~ 0.0%]
+            Writes    :       5 [2.10e+001 ~ 9.0%]
+        Spills        :      48 bytes*
+            Reads     :       6 [0.00e+000 ~ 0.0%]
+            Writes    :       6 [6.00e+000 ~ 2.6%]
+    
+    Notes
+    
+        *Non-overlapping variables and spills may share stack space,
+         so the total stack size might be less than this.
+    
+
+===========================================================================

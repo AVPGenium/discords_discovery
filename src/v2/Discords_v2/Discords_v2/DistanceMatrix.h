@@ -16,7 +16,7 @@ extern matrix_t matrix;
 * @param timeSeriesSubsequences - матрица подпоследовательностей
 * @return матрица расстояний
 */
-matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSubsequences);
+matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSubsequences, int threadNum, double* time);
 
 /**
 * Нахождение минимального элемента ряда матрицы
@@ -25,7 +25,7 @@ matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSub
 * @param timeSeriesSubsequences - матрица подпоследовательностей
 * @return матрица расстояний
 */
-float findRowMinElement(const long rowIndex, const long m, const long n, const matrix_t distanceMatrix);
+float findRowMinElement(const long rowIndex, const long m, const long n, const matrix_t distanceMatrix, int threadNum);
 
 /**
 * Вычеркивание элементов ряда матрицы, являющихся самоподобными

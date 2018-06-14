@@ -1,45 +1,51 @@
 #include <assert.h>
 #include <stdio.h>
+#include "omp.h"
 #include "DistanceMatrix.h"
 #include "Utils.h"
 
 matrix_t matrix;
 
-matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSubsequences)
+matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSubsequences, int threadNum, double* time)
 {
 	matrix_t distancies = (matrix_t)__align_malloc((m - n + 1) * sizeof(series_t));
 	assert(distancies != NULL);
-	for (int i = 0; i < m - n + 1; i++)
+	int subseqCount = m - n + 1;
+	for (int i = 0; i < subseqCount; i++)
 	{
-		distancies[i] = (series_t)__align_malloc((m - n + 1) * sizeof(item_t));
+		distancies[i] = (series_t)__align_malloc((subseqCount) * sizeof(item_t));
 		assert(distancies[i] != NULL);
 	}
-	#pragma omp parallel for collapse(2) shared(distancies, timeSeriesSubsequences, n)
-	for (int i = 0; i < m - n + 1; i++)
-	{
-		for (int j = 0; j < m - n + 1; j++)
+	double start = omp_get_wtime();
+		#pragma omp parallel for simd num_threads(threadNum) 
+		for (int i = 0; i < subseqCount; i++)
 		{
-			if(j <= i - n || j >= i + n)
+			for (int j = 0; j < subseqCount; j++)
 			{
-				distancies[i][j] = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
-			}
-			else
-			{
-				distancies[i][j] = POS_INF;
+				if (j <= i - n || j >= i + n)
+				{
+					distancies[i][j] = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
+				}
+				else
+				{
+					distancies[i][j] = POS_INF;
+				}
 			}
 		}
-	}
+	double end = omp_get_wtime();
+	*time += (end - start);
 	return distancies;
 }
 
-float findRowMinElement(const long rowIndex, const long m, const long n, const matrix_t distanceMatrix)
+float findRowMinElement(const long rowIndex, const long m, const long n, const matrix_t distanceMatrix, int threadNum)
 {
 	assert(n != 0);
 	float minValue = POS_INF;
+	int subseqCount = m - n + 1;
 	#pragma omp parallel shared(minValue)
 	{
-		#pragma omp for reduction(min:minValue)
-		for (long i = 0; i < m - n + 1; i++)
+		#pragma omp for simd reduction(min:minValue)
+		for (long i = 0; i < subseqCount; i++)
 		{
 			if (distanceMatrix[rowIndex][i] < minValue)
 			{

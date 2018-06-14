@@ -115,6 +115,7 @@
       <DisablePrecompiledHeaderMessages>true</DisablePrecompiledHeaderMessages>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CCppSupport>Cpp17Support</CCppSupport>
+      <OptimizationDiagnosticLevel>Level2</OptimizationDiagnosticLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
