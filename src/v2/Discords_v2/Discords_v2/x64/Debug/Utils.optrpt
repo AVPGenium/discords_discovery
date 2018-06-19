@@ -14,7 +14,7 @@ Begin optimization report for: distance(item_t, item_t)
 
     Report from: Interprocedural optimizations [ipo]
 
-F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(20,39):INLINE REPORT START:(distance(item_t, item_t)) [789]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(20,39):INLINE REPORT START:(distance(item_t, item_t)) [481]
 F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(21,9):(1)-> INLINE: sqrt(float)
 INLINE REPORT END
 
@@ -55,7 +55,7 @@ Begin optimization report for: distance2(item_t, item_t)
 
     Report from: Interprocedural optimizations [ipo]
 
-F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(30,40):INLINE REPORT START:(distance2(item_t, item_t)) [790]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(30,40):INLINE REPORT START:(distance2(item_t, item_t)) [482]
 INLINE REPORT END
 
     Report from: Code generation optimizations [cg]
@@ -95,7 +95,7 @@ Begin optimization report for: distance2(series_t, series_t, long)
 
     Report from: Interprocedural optimizations [ipo]
 
-F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(43,1):INLINE REPORT START:(distance2(series_t, series_t, long)) [791]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(43,1):INLINE REPORT START:(distance2(series_t, series_t, long)) [483]
 INLINE REPORT END
 
     Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
@@ -148,7 +148,7 @@ Begin optimization report for: distance(series_t, series_t, long)
 
     Report from: Interprocedural optimizations [ipo]
 
-F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(63,1):INLINE REPORT START:(distance(series_t, series_t, long)) [792]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(63,1):INLINE REPORT START:(distance(series_t, series_t, long)) [484]
 F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(70,9):(1)-> INLINE: sqrt(float)
 INLINE REPORT END
 
@@ -202,7 +202,7 @@ Begin optimization report for: min(series_t, int, int *)
 
     Report from: Interprocedural optimizations [ipo]
 
-F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(74,1):INLINE REPORT START:(min(series_t, int, int *)) [793]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(74,1):INLINE REPORT START:(min(series_t, int, int *)) [485]
 INLINE REPORT END
 
     Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]
@@ -256,7 +256,7 @@ Begin optimization report for: max(series_t, int, int *)
 
     Report from: Interprocedural optimizations [ipo]
 
-F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(88,1):INLINE REPORT START:(max(series_t, int, int *)) [794]
+F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\Utils.cpp(88,1):INLINE REPORT START:(max(series_t, int, int *)) [486]
 INLINE REPORT END
 
     Report from: Loop nest, Vector & Auto-parallelization optimizations [loop, vec, par]

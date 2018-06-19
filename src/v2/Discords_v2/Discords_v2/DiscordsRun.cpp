@@ -1,3 +1,9 @@
+/**
+* Parallel discords search algorithm for Intel Xeon Phi architecture
+* A module containing discords search logic
+* (c) 2018 Mikhail Zymbler, Andrei Poliakov
+*/
+
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
@@ -22,25 +28,24 @@ series_t timeSeries;
 */
 int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, double* time)
 {
+	int countOfSubseq = m - n + 1;
 	// create matrix of subsequencies
 	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
 	// calc distance matrix
 	matrix_t distancies = createDistanceMatrix(m, n, timeSeriesSubsequences, threadNum, time);
-	item_t* mins = (item_t*)__align_malloc((m - n + 1) * sizeof(item_t));
-	omp_set_nested(true);
+	item_t* mins = (item_t*)__align_malloc((countOfSubseq) * sizeof(item_t));
 	double start = omp_get_wtime();
-	int countOfSubseq = m - n + 1;
 	// for each row in distance matrix find min element
 	#pragma omp parallel for num_threads(threadNum) shared(mins, distancies)
     for (int i = 0; i < countOfSubseq; i++)
     {
         assert(n != 0);
         mins[i] = POS_INF;
-        for (long i = 0; i < countOfSubseq; i++)
+        for (int j = 0; j < countOfSubseq; j++)
         {
-            if (distanceMatrix[rowIndex][i] < minValue)
+            if (distancies[i][j] < mins[i])
             {
-                mins[i] = distanceMatrix[rowIndex][i];
+                mins[i] = distancies[i][j];
             }
         }
     }
@@ -75,7 +80,16 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n)
 	return result;
 }
 
-matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSubsequences, int threadNum, double* time)
+/**
+* Создание матрицы расстояний для заданной матрицы подпоследовательностей
+* @param m - длина временного ряда
+* @param n - длина подпоследовательности
+* @param timeSeriesSubsequences - матрица подпоследовательностей
+* @param threadNum - количество нитей исполнения
+* @output time - время выполнения
+* @return матрица расстояний
+*/
+matrix_t createDistanceMatrix(const int m, const int n, matrix_t timeSeriesSubsequences, int threadNum, double* time)
 {
     matrix_t distancies = (matrix_t)__align_malloc((m - n + 1) * sizeof(series_t));
     assert(distancies != NULL);
@@ -114,12 +128,14 @@ matrix_t createDistanceMatrix(const long m, const long n, matrix_t timeSeriesSub
 * @param length The length of series.
 * @return The Euclidean distance.
 */
-item_t distance2(const series_t series1, const series_t series2, const long length)
+item_t distance2(const series_t series1, const series_t series2, const int length)
 {
     assert(length > 0);
     assert(series1 != NULL);
     assert(series2 != NULL);
     float sum = 0;
+	MY_ASSUME_ALIGNED(series1);
+	MY_ASSUME_ALIGNED(series2);
     for (int i = 0; i < length; i++)
     {
         sum += (series1[i] - series2[i]) * (series1[i] - series2[i]);
@@ -127,10 +143,16 @@ item_t distance2(const series_t series1, const series_t series2, const long leng
     return sum;
 }
 
+/**
+* Finding min element in vector
+* @input series vector of data.
+* @input length The length of vector.
+* @output position
+*/
 item_t min(const series_t series, const int length, int* position)
 {
     item_t result = series[0];
-    for (long i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         if (series[i] < result)
         {
@@ -141,11 +163,17 @@ item_t min(const series_t series, const int length, int* position)
     return result;
 }
 
+/**
+* Finding max element in vector
+* @input series vector of data.
+* @input length The length of vector.
+* @output position
+*/
 item_t max(const series_t series, const int length, int* position)
 {
     item_t result = series[0];
 
-    for (long i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         if (series[i] > result)
         {

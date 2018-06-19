@@ -36,4 +36,41 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 */
 matrix_t createSubsequencies(const series_t T, const int m, const int n);
 
+/**
+* Создание матрицы расстояний для заданной матрицы подпоследовательностей
+* @param m - длина временного ряда
+* @param n - длина подпоследовательности
+* @param timeSeriesSubsequences - матрица подпоследовательностей
+* @param threadNum - количество нитей исполнения
+* @output time - время выполнения
+* @return матрица расстояний
+*/
+matrix_t createDistanceMatrix(const int m, const int n, matrix_t timeSeriesSubsequences, int threadNum, double* time);
+
+/**
+* Calculates the square of the Euclidean distance between two single-dimensional timeseries represented
+* by the rational vectors.
+* @param point1 The first timeseries.
+* @param point2 The second timeseries.
+* @param length The length of series.
+* @return The Euclidean distance.
+*/
+item_t distance2(const series_t series1, const series_t series2, const int length);
+
+/**
+* Finding min element in vector
+* @input series vector of data.
+* @input length The length of vector.
+* @output position
+*/
+item_t min(const series_t series, const int length, int* position);
+
+/**
+* Finding max element in vector
+* @input series vector of data.
+* @input length The length of vector.
+* @output position
+*/
+item_t max(const series_t series, const int length, int* position);
+
 #endif
