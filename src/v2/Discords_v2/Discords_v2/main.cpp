@@ -39,26 +39,26 @@ int main(int argc, char *argv[])
 	{
 		series = readTimeSeries(path, m);
 	}
-	int nums[] = {1, 1, 2, 4, 8, 16, 32 };
+	int nums[] = {4, 8, 16, 32 };
 	/*for (int i = 0; i < 7; i++)
 	{*/
 		item_t dist_matrix_bsf_dist = 0;
 		double time = 0;
 		int dist_matrix_loc = findDiscord(series, m, n, &dist_matrix_bsf_dist, threadsNum, &time);
-		writeResult(dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
-		printf("%d %f %f %d", dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
+		//writeResult(dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
+		printf("%f", time);
 	//}
 	//printf("%d %f %f", dist_matrix_loc, dist_matrix_bsf_dist, time);
 }
 
 void parseCommandLineArgs(int argc, char *argv[])
 {
-	std::cout << "There are " << argc << " arguments:\n";
+	//std::cout << "There are " << argc << " arguments:\n";
 	// todo: different combinations of args
 	assert(argc == 4 || argc == 5);
 	if (argc == 4)
 	{
-		cout << "m = " << argv[0] << "; path = " << argv[1] << "; n = " << argv[2] << "; threadsNum = " << argv[3] << ";\n";
+		//cout << "m = " << argv[0] << "; path = " << argv[1] << "; n = " << argv[2] << "; threadsNum = " << argv[3] << ";\n";
 		m = atoi(argv[0]);
 		path = argv[1];
 		n = atoi(argv[2]);
@@ -66,7 +66,7 @@ void parseCommandLineArgs(int argc, char *argv[])
 	}
 	else
 	{
-		cout << "m = " << argv[1] << "; path = " << argv[2] << "; n = " << argv[3] << "; threadsNum = " << argv[4] << ";\n";
+		//cout << "m = " << argv[1] << "; path = " << argv[2] << "; n = " << argv[3] << "; threadsNum = " << argv[4] << ";\n";
 		m = atoi(argv[1]);
 		path = argv[2];
 		n = atoi(argv[3]);
