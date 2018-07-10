@@ -17,12 +17,6 @@ extern series_t timeSeries;
 
 using namespace std;
 
-struct PrefixTreeNode {
-	char value;
-	PrefixTreeNode childs[3];
-	std:vector indexes;
-};
-
 /**
 * Нахождение диссонанса заданной длины в данном временном ряде
 * для заданной подпоследовательности

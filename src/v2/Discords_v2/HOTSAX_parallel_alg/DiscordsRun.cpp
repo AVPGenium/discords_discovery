@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "omp.h"
 #include "DiscordsRun.h"
+#include "SAX.h"
 
 int bsfPos;
 float bsfDist;
@@ -31,11 +32,12 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 {
 	countOfSubseq = m - n + 1;
 	// normalize
-
+	train(T, m);
+	series_t nT = normalize(T, m);
 	// create matrix of subsequencies
 	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
 	word* words = (word*)__align_malloc((countOfSubseq) * sizeof(word));
-	PrefixTreeNode* tree;
+	
 	// prepare
 	for (long i = 0; i < countOfSubseq; i++)
 	{
@@ -64,4 +66,28 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 		}
 	}
 	return 0;
+}
+
+/**
+* Создание матрицы подпоследовательностей
+* для заданной подпоследовательности
+* @param T - временной ряд
+* @param m - длина временного ряда
+* @param n - длина подпоследовательности
+* @return матрица подпоследовательностей
+*/
+matrix_t createSubsequencies(const series_t T, const int m, const int n)
+{
+	matrix_t result = (matrix_t)__align_malloc((m - n + 1) * sizeof(series_t));
+	assert(result != NULL);
+	for (int i = 0; i < m - n + 1; i++)
+	{
+		result[i] = (series_t)__align_malloc(n * sizeof(item_t));
+		assert(result[i] != NULL);
+	}
+	for (int i = 0; i < m - n + 1; i++)
+	{
+		memcpy(result[i], &T[i], n * sizeof(item_t));
+	}
+	return result;
 }
