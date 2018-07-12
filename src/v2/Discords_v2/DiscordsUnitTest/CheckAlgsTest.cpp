@@ -40,7 +40,9 @@ namespace DiscordsUnitTest
 			bruteforce_bsf_loc = BruteForceDiscordSearch(T, n, &bruteforce_bsf_dist);
 
 			float dist_matrix_bsf_dist;
-			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
+			int threadsNum = 4;
+			long time = 0;
+			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist, threadsNum, &time);
 
 			_aligned_free(T);
 			Assert::AreEqual(discord_loc, (ts_index_t)dist_matrix_loc);
@@ -72,9 +74,11 @@ namespace DiscordsUnitTest
 			bsf_loc = DiscordSearch(T, n, &bsf_dist);
 
 			bruteforce_bsf_loc = BruteForceDiscordSearch(T, n, &bruteforce_bsf_dist);
-
+	
 			float dist_matrix_bsf_dist;
-			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
+			int threadsNum = 4;
+			long time = 0;
+			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist,threadsNum, &time);
 
 			_aligned_free(T);
 			Assert::AreEqual(discord_loc, (ts_index_t)dist_matrix_loc);
@@ -108,7 +112,9 @@ namespace DiscordsUnitTest
 			bruteforce_bsf_loc = BruteForceDiscordSearch(T, n, &bruteforce_bsf_dist);
 
 			float dist_matrix_bsf_dist;
-			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist);
+			int threadsNum = 4;
+			long time = 0;
+			int dist_matrix_loc = findDiscord(T, TIME_SERIES_LEN, n, &dist_matrix_bsf_dist, threadsNum, &time);
 
 			_aligned_free(T);
 			Assert::AreEqual(discord_loc, (ts_index_t)dist_matrix_loc);
