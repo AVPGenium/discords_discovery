@@ -1,8 +1,0 @@
-
-=== Start: [2018/05/15 00:06:16] === 
-Analysis started...
-Result file: F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\My Advisor Results - Discords_v2\e000\trc000\trc000.advixe 
-Application exit code: 0 
-Result file: F:\Users\admin\Documents\discords_discovery\src\v2\Discords_v2\Discords_v2\My Advisor Results - Discords_v2\e000\trc000\trc000.advixe 
-Analysis completed
-=== End: [2018/05/15 00:06:24] === 

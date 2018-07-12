@@ -1,0 +1,40 @@
+#!/bin/bash
+# Run algorithm for experiments
+
+DATA=$2
+M=$1
+N=$3
+
+for i in 0
+do
+	echo "number of a  series of experiments = $i"
+	echo "count of threads = 1"
+	./main $M $DATA $N 1
+	echo "count of threads = 3"
+	./main $M $DATA $N 3
+	echo "count of threads = 6"
+	./main $M $DATA $N 6
+	echo "count of threads = 12"
+	./main $M $DATA $N 12
+	echo "count of threads = 18"
+	./main $M $DATA $N 18
+	echo "count of threads = 24"
+	./main $M $DATA $N 24
+done
+
+#THREADS_CPU=(1 3 6 12 18 24)
+#THREADS_PHI=(1 10 30 60 120 180 240)
+#DATA=$2 #file name where time series
+#M=$1 #length of time series
+#N=$3 #length of subsequence
+#COUNT_LOOPS_EXPERIMENTS=3
+
+#for ((i=0; i < COUNT_LOOPS_EXPERIMENTS; i++));
+#do
+#    for j in "${THREADS_CPU[@]}"
+#    do
+#	echo "number of a  series of experiments = $i"
+#	echo "count of threads = $j"
+#	./main $M $DATA $N $j
+#    done
+#done
