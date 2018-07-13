@@ -10,10 +10,10 @@
 
 using namespace std;
 
-char* BASE_DIR = "/data/";
-char* TIME_SERIES_FILE_NAME = "timeSeries.bin";
-char* RESULT_FILE_NAME = "result.bin";
-char* DISTANCE_MATRIX_FILE_NAME = "matrix.bin";
+extern char* BASE_DIR;
+extern char* TIME_SERIES_FILE_NAME;
+extern char* RESULT_FILE_NAME;
+extern char* DISTANCE_MATRIX_FILE_NAME;
 
 /**
  * Data structure:
@@ -31,6 +31,17 @@ matrix_t readDistanceMatrix(ifstream reader);
 
 bool writeResult(ofstream writer, long bsfPos, float bsfDist);
 
+bool writeResult(long bsfPos, float bsfDist, float time, int threadsNum);
+
 bool writeDistanceMatrix(ofstream writer, matrix_t distMatrix);
+
+/**
+ * Read time series items from text file
+ * File contains m items (one per line)
+ * @param m - length of time series
+ * @param path - path to file with time series data
+ * @return time series
+ */
+series_t readTimeSeries(char* path, int m);
 
 #endif

@@ -47,11 +47,18 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 	// prepare
 	for (long i = 0; i < countOfSubseq; i++)
 	{
+<<<<<<< HEAD
 		word saxWord = saxify(timeSeriesSubsequences[i], n);
 		words[i] = saxWord;
 	}
 
 
+=======
+		word saxWord = saxify(timeSeriesSubsequences[i]);
+		words[i] = saxWord;
+		tree.addNode(saxWord, i);
+	}
+>>>>>>> 62f6f61a32d2751e6434746fecea703f2c38685b
 	for(int p = 1; p < countOfSubseq; p++) {
 		double min = POS_INF;
 		bool earlyExit = false;
@@ -97,6 +104,7 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n)
 		memcpy(result[i], &T[i], n * sizeof(item_t));
 	}
 	return result;
+<<<<<<< HEAD
 }
 
 long calcIndexByWord(word saxWord)
@@ -107,4 +115,6 @@ long calcIndexByWord(word saxWord)
 void generateSaxWords()
 {
 
+=======
+>>>>>>> 62f6f61a32d2751e6434746fecea703f2c38685b
 }
