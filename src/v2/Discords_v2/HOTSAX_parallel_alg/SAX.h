@@ -40,6 +40,11 @@ series_t PAA(series_t sequence, const int n);
  * Input: saxWord - word
  * Return: hash
  */
-long hash(word saxWord);
+long hashWord(word saxWord);
+
+/*
+* generate words table (such as trie but array)
+*/
+long** generateWordsTable();
 
 #endif

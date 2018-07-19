@@ -16,11 +16,8 @@ float bsfDist;
 series_t timeSeries;
 int countOfSubseq;
 
-// for now: words of 3 symbols and count of 
-long words[4];
-// indexes for corresponding to sax words subsequences
-long**indexes;
-
+size_t m_string_size = 3;
+size_t m_alphabet_size = 3;
 
 /**
 * Нахождение диссонанса заданной длины в данном временном ряде
@@ -41,32 +38,53 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 	train(T, m);
 	series_t nT = normalize(T, m);
 	// create matrix of subsequencies
-	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
+	matrix_t timeSeriesSubsequences = createSubsequencies(nT, m, n);
 	word* words = (word*)__align_malloc((countOfSubseq) * sizeof(word));
-	
+	for (long i = 0; i < countOfSubseq; i++)
+	{
+		words[i] = (word)__align_malloc((countOfSubseq) * sizeof(symbol));
+	}
+
+	long* minValIndexes = (long*)__align_malloc((countOfSubseq) * sizeof(long));
+	long minValIndexesCount = 0;
+	// indexes for corresponding to sax words subsequences
+	long**wordsTable = generateWordsTable();
+	long** chainsOfIndexes = (long**)__align_malloc(powl(m_alphabet_size, m_string_size) * sizeof(long*));
+	for (long i = 0; i < powl(m_alphabet_size, m_string_size); i++)
+	{
+		chainsOfIndexes[i] = (long*)__align_malloc((countOfSubseq) * sizeof(long));
+	}
+
 	// prepare
 	for (long i = 0; i < countOfSubseq; i++)
 	{
-<<<<<<< HEAD
 		word saxWord = saxify(timeSeriesSubsequences[i], n);
 		words[i] = saxWord;
+		long index = hashWord(saxWord);
+		chainsOfIndexes[index][wordsTable[index][m_string_size]] = i;
+		// need sync in multithreading mode
+		wordsTable[index][m_string_size]++;
 	}
 
+	// todo: find min indexes and put it in array
 
-=======
-		word saxWord = saxify(timeSeriesSubsequences[i]);
-		words[i] = saxWord;
-		tree.addNode(saxWord, i);
-	}
->>>>>>> 62f6f61a32d2751e6434746fecea703f2c38685b
-	for(int p = 1; p < countOfSubseq; p++) {
+	// main stage: finding the discord
+	bsfDist = 0;
+	for (long i = 0; i < minValIndexesCount; i++)
+	{
 		double min = POS_INF;
 		bool earlyExit = false;
-		for(int j = 0; j < countOfSubseq; j++) {
-			if (!isSelfMatch(𝑝, 𝑗) {
-				double dist = dist2(𝑝, 𝑗);
-				if (dist < best_so_far_dist) {
+		long chainIndex = hashWord(words[minValIndexes[i]]);
+		long innerIterationsCount = wordsTable[chainIndex][m_string_size];
+
+		for (long j = 0; j < innerIterationsCount; j++)
+		{
+			if (!isSelfMatch(minValIndexes[i], chainsOfIndexes[chainIndex][j], n))
+			{
+				double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[chainsOfIndexes[chainIndex][j]], n);
+				if (dist < bsfDist) {
 					earlyExit = true;
+					// add pragma for openmp
 					break;
 				}
 				if (dist < min) {
@@ -74,12 +92,73 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 				}
 			}
 		}
-		if(!earlyExit && min > best_so_far_dist) {
-			best_so_far_dist = min;
-			best_so_far_pos = p;
+		for (long j = 0; j < countOfSubseq; j++)
+		{
+			if (!binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) && !isSelfMatch(minValIndexes[i], j, n))
+			{
+				double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[j], n);
+				if (dist < bsfDist) {
+					earlyExit = true;
+					// add pragma for openmp
+					break;
+				}
+				if (dist < min) {
+					min = dist;
+				}
+			}
+		}
+		if (!earlyExit && min > bsfDist) {
+			bsfDist = min;
+			bsfPos = i;
 		}
 	}
-	return 0;
+
+	for (long i = 0; i < countOfSubseq; i++)
+	{
+		if (!binSearch(minValIndexes, minValIndexesCount, i))
+		{
+			double min = POS_INF;
+			bool earlyExit = false;
+			long chainIndex = hashWord(words[i]);
+			long innerIterationsCount = wordsTable[chainIndex][m_string_size];
+
+			for (long j = 0; j < innerIterationsCount; j++)
+			{
+				if (!isSelfMatch(i, chainsOfIndexes[chainIndex][j], n))
+				{
+					double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[chainsOfIndexes[chainIndex][j]], n);
+					if (dist < bsfDist) {
+						earlyExit = true;
+						// add pragma for openmp
+						break;
+					}
+					if (dist < min) {
+						min = dist;
+					}
+				}
+			}
+			for (long j = 0; j < countOfSubseq; j++)
+			{
+				if (!binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) && !isSelfMatch(i, j, n))
+				{
+					double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
+					if (dist < bsfDist) {
+						earlyExit = true;
+						// add pragma for openmp
+						break;
+					}
+					if (dist < min) {
+						min = dist;
+					}
+				}
+			}
+			if (!earlyExit && min > bsfDist) {
+				bsfDist = min;
+				bsfPos = i;
+			}
+		}
+	}
+	return bsfPos;
 }
 
 /**
@@ -104,17 +183,103 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n)
 		memcpy(result[i], &T[i], n * sizeof(item_t));
 	}
 	return result;
-<<<<<<< HEAD
 }
 
-long calcIndexByWord(word saxWord)
+/*
+ * Binary search in given array
+ * Return: index of element or -1
+ */
+long binSearch(long* array, long size, long value)
 {
-	return 0;
+	long average_index = 0; // переменная для хранения индекса среднего элемента массива
+	long first_index = 0; // индекс первого элемента в массиве
+	long last_index = size - 1; // индекс последнего элемента в массиве
+	if (last_index == -1)
+	{
+		//cout << "\narray is empty" << endl; // массив пуст
+		return last_index;
+	}
+	while (first_index < last_index)
+	{
+		average_index = first_index + (last_index - first_index) / 2; // меняем индекс среднего значения
+		value <= array[average_index] ? last_index = average_index : first_index = average_index + 1;    // найден ключевой элемент или нет 
+	}
+	if (array[last_index] == value)
+	{
+		return last_index;
+	}
+	else
+	{
+		return -1;
+	}
 }
 
-void generateSaxWords()
+bool isSelfMatch(long i, long j, long n)
 {
-
-=======
->>>>>>> 62f6f61a32d2751e6434746fecea703f2c38685b
+	return !(j <= i - n || j >= i + n);
 }
+
+/**
+* Calculates the square of the Euclidean distance between two single-dimensional timeseries represented
+* by the rational vectors.
+* @param point1 The first timeseries.
+* @param point2 The second timeseries.
+* @param length The length of series.
+* @return The Euclidean distance.
+*/
+item_t distance2(const series_t series1, const series_t series2, const int length)
+{
+	assert(length > 0);
+	assert(series1 != NULL);
+	assert(series2 != NULL);
+	float sum = 0;
+	MY_ASSUME_ALIGNED(series1);
+	MY_ASSUME_ALIGNED(series2);
+	for (int i = 0; i < length; i++)
+	{
+		sum += (series1[i] - series2[i]) * (series1[i] - series2[i]);
+	}
+	return sum;
+}
+
+/**
+* Finding min element in vector
+* @input series vector of data.
+* @input length The length of vector.
+* @output position
+*/
+item_t min(const series_t series, const int length, int* position)
+{
+	item_t result = series[0];
+	for (int i = 0; i < length; i++)
+	{
+		if (series[i] < result)
+		{
+			result = series[i];
+			*position = i;
+		}
+	}
+	return result;
+}
+
+/**
+* Finding max element in vector
+* @input series vector of data.
+* @input length The length of vector.
+* @output position
+*/
+item_t max(const series_t series, const int length, int* position)
+{
+	item_t result = series[0];
+
+	for (int i = 0; i < length; i++)
+	{
+		if (series[i] > result)
+		{
+			result = series[i];
+			*position = i;
+		}
+	}
+	return result;
+}
+

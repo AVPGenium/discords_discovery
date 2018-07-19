@@ -8,6 +8,7 @@
 #include "SAX.h"
 #include <cassert>
 #include <cmath>
+#include <float.h>
 
 size_t m_window_size;
 size_t m_string_size = 3;
@@ -129,7 +130,7 @@ void train(series_t timeSeries, const long size) {
 * Input: saxWord - word
 * Return: hash
 */
-long hash(word saxWord) {
+long hashWord(word saxWord) {
 	char beginSym = 'a';
 	int result = 0;
 	for (int i = m_string_size - 1; i >= 0; i--)
@@ -139,39 +140,57 @@ long hash(word saxWord) {
 	return result;
 }
 
-/*
- * Temporary for alphabet size = n
- */
-long* generateWordsTable()
+bool NextSet(int *a, int n, int m)
 {
-	long* wordsTable = (long*)__align_malloc((4) * sizeof(long));
-	int n, k, i, p, c, q, l; bool get_out;
-	string s, t;
-	l = pow(n, k);
+	int j = m - 1;
+	while (j >= 0 && a[j] == n)
+	{
+		j--;
+	}
+	if (j < 0)
+	{
+		return false;
+	}
+	if (a[j] >= n)
+	{
+		j--;
+	}
+	a[j]++;
+	if (j == m - 1)
+	{
+		return true;
+	}
+	for (int k = j + 1; k < m; k++)
+	{
+		a[k] = 1;
+	}
+	return true;
+}
 
-	for (i = 0; i < l; i++) {
-		p = i; s = ""; c = 0;
+/*
+ * generate words table (such as trie but array)
+ */
+long** generateWordsTable()
+{
+	long** wordsTable = (long**)__align_malloc(powl(m_alphabet_size, m_string_size) * sizeof(long*));
+	for (long i = 0; i < powl(m_alphabet_size, m_string_size); i++)
+	{
+		wordsTable[i] = (long*)__align_malloc((m_string_size + 1) * sizeof(long));
+	}
 
-		while (pow(n, c) <= p) c++;
-
-		for (q = 0; q < c; q++) {
-			wordsTable[i][q] = (char)(p % n + 48)
-			s += (char)(p % n + 48);
-			p /= n;
+	int* a = new int[m_string_size];
+	for (int j = 0; j < m_string_size; j++)
+	{
+		a[j] = 1;
+	}
+	for (int i = 0; i < powl(m_alphabet_size, m_string_size); i++)
+	{
+		for (int j = 0; j < m_string_size; j++)
+		{
+			wordsTable[i][j] = alphabet[a[j] - 1];
 		}
-
-		if (s.length() < k) for (p = 0; p < k - s.length(); p++) wordsTable[i][p] << "a";
-
-		get_out = false;
-		for (q = 0; q < c; q++) {
-			t = "";
-			for (p = 0; p < s.length(); p++)
-			{
-				wordsTable[i][q] = (char)(p + 48);
-				t += (char)(p + 48);
-			}
-			if (t == s) get_out = true;
-		}
+		wordsTable[i][m_string_size] = 0;
+		NextSet(a, m_alphabet_size, m_string_size);
 	}
 	return wordsTable;
 }

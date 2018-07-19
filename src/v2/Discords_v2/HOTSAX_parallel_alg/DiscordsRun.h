@@ -67,4 +67,12 @@ item_t min(const series_t series, const int length, int* position);
 */
 item_t max(const series_t series, const int length, int* position);
 
+/*
+* Binary search in given array
+* Return: index of element or -1
+*/
+long binSearch(long* array, long size, long value);
+
+bool isSelfMatch(long i, long j, long n);
+
 #endif
