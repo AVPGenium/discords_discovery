@@ -16,9 +16,6 @@ float bsfDist;
 series_t timeSeries;
 int countOfSubseq;
 
-size_t m_string_size = 3;
-size_t m_alphabet_size = 3;
-
 /**
 * Нахождение диссонанса заданной длины в данном временном ряде
 * для заданной подпоследовательности
@@ -66,7 +63,23 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 		wordsTable[index][m_string_size]++;
 	}
 
-	// todo: find min indexes and put it in array
+	// find min indexes and put it in array
+	long minFrequencyValue = wordsTable[0][m_string_size];
+	for (long i = 0; i < powl(m_alphabet_size, m_string_size); i++)
+	{
+		if (wordsTable[i][m_string_size] < minFrequencyValue)
+		{
+			minFrequencyValue = wordsTable[i][m_string_size];
+		}
+	}
+	for (long i = 0; i < powl(m_alphabet_size, m_string_size); i++)
+	{
+		if (wordsTable[i][m_string_size] == minFrequencyValue)
+		{
+			minValIndexes[minValIndexesCount] = i;
+			minValIndexesCount++;
+		}
+	}
 
 	// main stage: finding the discord
 	bsfDist = 0;

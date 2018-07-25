@@ -10,6 +10,11 @@
 
 #include "Config.h"
 
+extern size_t m_string_size;
+extern size_t m_alphabet_size;
+extern float m_baseline_mean;
+extern float m_baseline_stdev;
+
 /*
 * Create SAX representation of given subsequnce of time series
 * Input: sequence and it's size

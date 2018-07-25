@@ -9,6 +9,7 @@
 #include <cassert>
 #include <cmath>
 #include <float.h>
+#include <iostream>
 
 size_t m_window_size;
 size_t m_string_size = 3;
@@ -35,14 +36,13 @@ word saxify(series_t sequence, const int n)
 	assert(sequence !=  NULL);
 	// create PAA representation of given subsequence
 	series_t paa = PAA(sequence, n);
-	symbol syms[wordLength];
+	word syms = (word)__align_malloc(wordLength * sizeof(symbol));
 	// map to symbols.
 	for (size_t i = 0; i < wordLength; ++i) {
-
 		int cnt = 0;
-		for (int i = 0; i < m_alphabet_size - 1; i++)
+		for (int j = 0; j < m_alphabet_size - 1; j++)
 		{
-			if (paa[i] >= m_cutpoints[i])
+			if (paa[i] >= m_cutpoints[j])
 			{
 				cnt++;
 			}
@@ -75,15 +75,19 @@ series_t normalize(series_t timeSeries, const long size)
  */
 series_t PAA(series_t sequence, const int n)
 {
-	item_t paa[wordLength];
+	item_t* paa = (series_t)__align_malloc(wordLength * sizeof(item_t));;
+	for (int i = 0; i < wordLength; i++)
+	{
+		paa[i] = 0;
+	}
 	long paa_window = n / m_string_size;
 	for (int i = 0; i < wordLength; i++)
 	{
-		for (long j = paa_window * (i - 1) + 1; j < paa_window * i; j++)
+		for (long j = paa_window * i; j < paa_window * (i + 1); j++)
 		{
 			paa[i] += sequence[j];
 		}
-		paa[i] *= m_string_size / n;
+		paa[i] *= 1.0f * m_string_size / n;
 	}
 	
 	return paa;
@@ -121,7 +125,7 @@ void train(series_t timeSeries, const long size) {
 	}
 	m_baseline_mean = mean;
 	m_baseline_stdev = stdev;
-
+	std::cout << mean << " " << stdev << std::endl;
 	m_trained = true;
 }
 
@@ -135,7 +139,7 @@ long hashWord(word saxWord) {
 	int result = 0;
 	for (int i = m_string_size - 1; i >= 0; i--)
 	{
-		result += abs(saxWord[i] - 'a')*powl(m_string_size, m_string_size - i);
+		result += abs(saxWord[i] - 'a')*powl(m_string_size, m_string_size - 1 - i);
 	}
 	return result;
 }
