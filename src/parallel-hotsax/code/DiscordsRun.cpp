@@ -14,7 +14,10 @@
 int bsfPos;
 float bsfDist;
 series_t timeSeries;
-int countOfSubseq;
+long countOfSubseq;
+
+int _threadNum;
+double* _time;
 
 /**
 * Нахождение диссонанса заданной длины в данном временном ряде
@@ -28,18 +31,20 @@ int countOfSubseq;
 * @return индекс начала диссонанса
 * @return индекс начала диссонанса
 */
-int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, double* time)
+int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threadNum, double* time)
 {
 	countOfSubseq = m - n + 1;
+	_threadNum = threadNum;
+	_time = time;
 	// normalize
-	train(T, m);
-	series_t nT = normalize(T, m);
+	train(T, m, threadNum, time);
+	T = normalize(T, m);
 	// create matrix of subsequencies
-	matrix_t timeSeriesSubsequences = createSubsequencies(nT, m, n);
+	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
 	word* words = (word*)__align_malloc((countOfSubseq) * sizeof(word));
 	for (long i = 0; i < countOfSubseq; i++)
 	{
-		words[i] = (word)__align_malloc((countOfSubseq) * sizeof(symbol));
+		words[i] = (word)__align_malloc((m_string_size) * sizeof(symbol));
 	}
 
 	long* minValIndexes = (long*)__align_malloc((countOfSubseq) * sizeof(long));
@@ -53,6 +58,8 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 	}
 
 	// prepare
+	double start = omp_get_wtime();
+	#pragma omp parallel for num_threads(threadNum) shared(timeSeriesSubsequences, words, chainsOfIndexes, wordsTable)
 	for (long i = 0; i < countOfSubseq; i++)
 	{
 		word saxWord = saxify(timeSeriesSubsequences[i], n);
@@ -60,14 +67,19 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 		long index = hashWord(saxWord);
 		chainsOfIndexes[index][wordsTable[index][m_string_size]] = i;
 		// need sync in multithreading mode
-		wordsTable[index][m_string_size]++;
+		#pragma omp critical
+		{
+			wordsTable[index][m_string_size]++;
+		}
 	}
 
 	// find min indexes and put it in array
-	long minFrequencyValue = wordsTable[0][m_string_size];
+	//long minFrequencyValue = wordsTable[0][m_string_size];
+	long minFrequencyValue = MAX_LONG;
+	// ? need be parallel?
 	for (long i = 0; i < powl(m_alphabet_size, m_string_size); i++)
 	{
-		if (wordsTable[i][m_string_size] < minFrequencyValue)
+		if (wordsTable[i][m_string_size] < minFrequencyValue && wordsTable[i][m_string_size] > 0)
 		{
 			minFrequencyValue = wordsTable[i][m_string_size];
 		}
@@ -76,59 +88,79 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 	{
 		if (wordsTable[i][m_string_size] == minFrequencyValue)
 		{
-			minValIndexes[minValIndexesCount] = i;
-			minValIndexesCount++;
+			for (long j = 0; j < minFrequencyValue; j++)
+			{
+				minValIndexes[minValIndexesCount] = chainsOfIndexes[i][j];
+				minValIndexesCount++;
+			}
 		}
 	}
+	sortIndexes(minValIndexes, minValIndexesCount);
 
-	// main stage: finding the discord
 	bsfDist = 0;
+	// first outer circle will not be parallelized because minValIndexesCount < threadNum
 	for (long i = 0; i < minValIndexesCount; i++)
 	{
 		double min = POS_INF;
 		bool earlyExit = false;
 		long chainIndex = hashWord(words[minValIndexes[i]]);
 		long innerIterationsCount = wordsTable[chainIndex][m_string_size];
-
+		#pragma omp parallel for num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
 		for (long j = 0; j < innerIterationsCount; j++)
 		{
 			if (!isSelfMatch(minValIndexes[i], chainsOfIndexes[chainIndex][j], n))
 			{
 				double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[chainsOfIndexes[chainIndex][j]], n);
 				if (dist < bsfDist) {
-					earlyExit = true;
-					// add pragma for openmp
-					break;
+					#pragma omp critical
+					{
+						earlyExit = true;
+					}
+					// add pragma cancel for openmp
+					// instead break;
+					#pragma omp cancel for 
 				}
 				if (dist < min) {
-					min = dist;
+					#pragma omp critical
+					{
+						min = dist;
+					}
 				}
 			}
 		}
+		#pragma omp parallel for num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
 		for (long j = 0; j < countOfSubseq; j++)
 		{
-			if (!binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) && !isSelfMatch(minValIndexes[i], j, n))
+			if (binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) == -1 && !isSelfMatch(minValIndexes[i], j, n))
 			{
 				double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[j], n);
 				if (dist < bsfDist) {
-					earlyExit = true;
+					#pragma omp critical
+					{
+						earlyExit = true;
+					}
 					// add pragma for openmp
-					break;
+					// break;
+					#pragma omp cancel for
 				}
 				if (dist < min) {
-					min = dist;
+					#pragma omp critical
+					{
+						min = dist;
+					}
 				}
 			}
 		}
 		if (!earlyExit && min > bsfDist) {
 			bsfDist = min;
-			bsfPos = i;
+			bsfPos = minValIndexes[i];
 		}
 	}
 
+	#pragma omp parallel for num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
 	for (long i = 0; i < countOfSubseq; i++)
 	{
-		if (!binSearch(minValIndexes, minValIndexesCount, i))
+		if (binSearch(minValIndexes, minValIndexesCount, i) == -1)
 		{
 			double min = POS_INF;
 			bool earlyExit = false;
@@ -142,7 +174,6 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 					double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[chainsOfIndexes[chainIndex][j]], n);
 					if (dist < bsfDist) {
 						earlyExit = true;
-						// add pragma for openmp
 						break;
 					}
 					if (dist < min) {
@@ -152,12 +183,11 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 			}
 			for (long j = 0; j < countOfSubseq; j++)
 			{
-				if (!binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) && !isSelfMatch(i, j, n))
+				if (binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) == -1 && !isSelfMatch(i, j, n))
 				{
 					double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
 					if (dist < bsfDist) {
 						earlyExit = true;
-						// add pragma for openmp
 						break;
 					}
 					if (dist < min) {
@@ -166,11 +196,15 @@ int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int
 				}
 			}
 			if (!earlyExit && min > bsfDist) {
-				bsfDist = min;
-				bsfPos = i;
+				#pragma omp critical
+				{
+					bsfDist = min;
+					bsfPos = i;
+				}
 			}
 		}
 	}
+	*bsf_dist = bsfDist;
 	return bsfPos;
 }
 
@@ -196,6 +230,27 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n)
 		memcpy(result[i], &T[i], n * sizeof(item_t));
 	}
 	return result;
+}
+
+// TODO: rewrite to qsort 
+void sortIndexes(long* array, long n)
+{
+	#pragma omp parallel for num_threads(_threadNum)
+	for (long i = 0; i < n - 1; i++)
+	{
+		for (long j = 0; j < n - i - 1; j++)
+		{
+			if (array[j] > array[j + 1])
+			{
+				int tmp = array[j];
+				#pragma omp critical
+				{
+					array[j] = array[j + 1];
+					array[j + 1] = tmp;
+				}
+			}
+		}
+	}
 }
 
 /*

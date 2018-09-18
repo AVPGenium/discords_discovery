@@ -48,4 +48,6 @@ typedef symbol* word;
 #define POS_INF (1e20)
 #define NEG_INF -(POS_INF)
 
+#define MAX_LONG (9999999999)
+
 #endif

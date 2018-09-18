@@ -24,7 +24,7 @@ char* GENERATE_PATH = "generate";
  * 1. m
  * 2. path to time series [default, generate or URI]
  * 3. n
- * 4. threadNum количество нитей
+ * 4. threadNum РєРѕР»РёС‡РµСЃС‚РІРѕ РЅРёС‚РµР№
  */
 void parseCommandLineArgs(int argc, char *argv[]);
 

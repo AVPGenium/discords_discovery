@@ -10,21 +10,26 @@
 #include <cmath>
 #include <float.h>
 #include <iostream>
+#include "omp.h"
 
 size_t m_window_size;
-size_t m_string_size = 3;
-size_t m_alphabet_size = 3;
+size_t m_string_size = 4;
+size_t m_alphabet_size = 4;
 
 // mean, stdev and cutpoints
 float m_baseline_mean;
 float m_baseline_stdev;
-float m_cutpoints[2] = { -0.43, 0.43 };
-symbol alphabet[3] = { 'a', 'b', 'c' };
+float m_cutpoints[3] = { -0.67, 0, 0.67 };
+symbol alphabet[4] = { 'a', 'b', 'c', 'd' };
 
 // length of SAX words and PAA subsequences
-const int wordLength = 3;
+const int wordLength = 4;
 
 bool m_trained = false;
+
+// from main function
+int _threadNum;
+double* _time;
 
 /*
  * Create SAX representation of given subsequnce of time series
@@ -57,21 +62,22 @@ word saxify(series_t sequence, const int n)
  */
 series_t normalize(series_t timeSeries, const long size)
 {
-	if (!m_trained)
-	{
-		train(timeSeries, size);
-	}
-	series_t result = (series_t)__align_malloc(size * sizeof(item_t));
+	//series_t result = (series_t)__align_malloc(size * sizeof(item_t));
+	double start = omp_get_wtime();
+	#pragma omp parallel for num_threads(_threadNum) shared(timeSeries)
 	for (size_t i = 0; i < size; i++) {
 		// normalize around baseline
-		result[i] = (timeSeries[i] - m_baseline_mean) / m_baseline_stdev;
+		timeSeries[i] = (timeSeries[i] - m_baseline_mean) / m_baseline_stdev;
 	}
-	return result;
+	double end = omp_get_wtime();
+	*_time += (end - start);
+	return timeSeries;
 }
 
 /*
  * Create PAA approximation of given time series subsequence
- * Input: 
+ * Input: series_t sequence and int n - length of sequence
+ * Return: PAA approximation
  */
 series_t PAA(series_t sequence, const int n)
 {
@@ -98,8 +104,10 @@ series_t PAA(series_t sequence, const int n)
  * normalizing the input time series.
  * Input: timeSeries and it's size
  */
-void train(series_t timeSeries, const long size) {
+void train(series_t timeSeries, const long size, int threadNum, double* time) {
 	m_trained = false;
+	_threadNum = threadNum;
+	_time = time;
 	double mean = 0;
 	double stdev = DBL_MIN;
 	if (size < 2) 
@@ -111,6 +119,7 @@ void train(series_t timeSeries, const long size) {
 	{
 		size_t n = 0;
 		double M2 = 0;
+		//#pragma omp parallel for num_threads(_threadNum) reduction(+:mean, M2)
 		for (long i = 0; i < size; i++) {
 			++n;
 			double delta = timeSeries[i] - mean;
@@ -187,6 +196,8 @@ long** generateWordsTable()
 	{
 		a[j] = 1;
 	}
+	double start = omp_get_wtime();
+	#pragma omp parallel for num_threads(_threadNum) shared(a, wordsTable)
 	for (int i = 0; i < powl(m_alphabet_size, m_string_size); i++)
 	{
 		for (int j = 0; j < m_string_size; j++)
@@ -196,5 +207,7 @@ long** generateWordsTable()
 		wordsTable[i][m_string_size] = 0;
 		NextSet(a, m_alphabet_size, m_string_size);
 	}
+	double end = omp_get_wtime();
+	*_time += (end - start);
 	return wordsTable;
 }
