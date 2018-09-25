@@ -24,7 +24,7 @@ char* GENERATE_PATH = "generate";
  * 1. m
  * 2. path to time series [default, generate or URI]
  * 3. n
- * 4. threadNum РєРѕР»РёС‡РµСЃС‚РІРѕ РЅРёС‚РµР№
+ * 4. threadNum количество нитей
  */
 void parseCommandLineArgs(int argc, char *argv[]);
 
@@ -39,15 +39,16 @@ int main(int argc, char *argv[])
 	{
 		series = readTimeSeries(path, m);
 	}
-	int nums[] = {4, 8, 16, 32 };
-	/*for (int i = 0; i < 7; i++)
-	{*/
+	int nums[] = {1, 2, 4, 8, 16, 32 };
+	for (int i = 0; i < 6; i++)
+	{
 		item_t dist_matrix_bsf_dist = 0;
 		double time = 0;
+		threadsNum = nums[i];
 		int dist_matrix_loc = findDiscord(series, m, n, &dist_matrix_bsf_dist, threadsNum, &time);
-		//writeResult(dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
+		writeResult(dist_matrix_loc, dist_matrix_bsf_dist, time, threadsNum);
 		printf("%f", time);
-	//}
+	}
 	//printf("%d %f %f", dist_matrix_loc, dist_matrix_bsf_dist, time);
 }
 

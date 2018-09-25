@@ -8,16 +8,15 @@
 #include <stdio.h>
 #include <assert.h>
 #include "omp.h"
+#include "Globals.h"
 #include "DiscordsRun.h"
+#include "ArrayUtils.h"
 #include "SAX.h"
 
 int bsfPos;
 float bsfDist;
 series_t timeSeries;
 long countOfSubseq;
-
-int _threadNum;
-double* _time;
 
 /**
 * Нахождение диссонанса заданной длины в данном временном ряде
@@ -37,7 +36,7 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 	_threadNum = threadNum;
 	_time = time;
 	// normalize
-	train(T, m, threadNum, time);
+	train(T, m);
 	T = normalize(T, m);
 	// create matrix of subsequencies
 	matrix_t timeSeriesSubsequences = createSubsequencies(T, m, n);
@@ -66,17 +65,12 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 		words[i] = saxWord;
 		long index = hashWord(saxWord);
 		chainsOfIndexes[index][wordsTable[index][m_string_size]] = i;
-		// need sync in multithreading mode
-		#pragma omp critical
-		{
-			wordsTable[index][m_string_size]++;
-		}
+		#pragma omp atomic 
+		wordsTable[index][m_string_size]++;
 	}
 
 	// find min indexes and put it in array
-	//long minFrequencyValue = wordsTable[0][m_string_size];
 	long minFrequencyValue = MAX_LONG;
-	// ? need be parallel?
 	for (long i = 0; i < powl(m_alphabet_size, m_string_size); i++)
 	{
 		if (wordsTable[i][m_string_size] < minFrequencyValue && wordsTable[i][m_string_size] > 0)
@@ -101,58 +95,55 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 	// first outer circle will not be parallelized because minValIndexesCount < threadNum
 	for (long i = 0; i < minValIndexesCount; i++)
 	{
-		double min = POS_INF;
+		double min_val = POS_INF;
 		bool earlyExit = false;
-		long chainIndex = hashWord(words[minValIndexes[i]]);
+		long currentMinValIndex = minValIndexes[i];
+		word currentMinValSaxWord = words[currentMinValIndex];
+		long chainIndex = hashWord(currentMinValSaxWord);
 		long innerIterationsCount = wordsTable[chainIndex][m_string_size];
-		#pragma omp parallel for num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
+		#pragma omp parallel num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
+		#pragma omp for schedule(dynamic, 1) reduction(min:min_val)
 		for (long j = 0; j < innerIterationsCount; j++)
 		{
-			if (!isSelfMatch(minValIndexes[i], chainsOfIndexes[chainIndex][j], n))
+			bool selfMatch = isSelfMatch(minValIndexes[i], chainsOfIndexes[chainIndex][j], n);
+			if (!selfMatch)
 			{
 				double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[chainsOfIndexes[chainIndex][j]], n);
 				if (dist < bsfDist) {
-					#pragma omp critical
-					{
-						earlyExit = true;
-					}
-					// add pragma cancel for openmp
-					// instead break;
+					#pragma omp atomic write
+					earlyExit = true;
 					#pragma omp cancel for 
+					//break;
 				}
-				if (dist < min) {
-					#pragma omp critical
-					{
-						min = dist;
-					}
+				if (dist < min_val) {
+						min_val = dist;
 				}
 			}
 		}
-		#pragma omp parallel for num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
+		#pragma omp parallel num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
+		#pragma omp for schedule(dynamic, 1) reduction(min:min_val)
 		for (long j = 0; j < countOfSubseq; j++)
 		{
-			if (binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) == -1 && !isSelfMatch(minValIndexes[i], j, n))
+			bool selfMatch = isSelfMatch(minValIndexes[i], j, n);
+			if (!selfMatch)
 			{
-				double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[j], n);
-				if (dist < bsfDist) {
-					#pragma omp critical
-					{
+				long binSearchResult = binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j);
+				if (binSearchResult == -1)
+				{
+					double dist = distance2(timeSeriesSubsequences[minValIndexes[i]], timeSeriesSubsequences[j], n);
+					if (dist < bsfDist) {
+						#pragma omp atomic write
 						earlyExit = true;
+						#pragma omp cancel for
 					}
-					// add pragma for openmp
-					// break;
-					#pragma omp cancel for
-				}
-				if (dist < min) {
-					#pragma omp critical
-					{
-						min = dist;
+					if (dist < min_val) {
+						min_val = dist;
 					}
 				}
 			}
 		}
-		if (!earlyExit && min > bsfDist) {
-			bsfDist = min;
+		if (!earlyExit && min_val > bsfDist) {
+			bsfDist = min_val;
 			bsfPos = minValIndexes[i];
 		}
 	}
@@ -160,7 +151,8 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 	#pragma omp parallel for num_threads(threadNum) shared(minValIndexes, chainsOfIndexes, timeSeriesSubsequences)
 	for (long i = 0; i < countOfSubseq; i++)
 	{
-		if (binSearch(minValIndexes, minValIndexesCount, i) == -1)
+		long binSearchResult = binSearch(minValIndexes, minValIndexesCount, i);
+		if (binSearchResult == -1)
 		{
 			double min = POS_INF;
 			bool earlyExit = false;
@@ -169,7 +161,8 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 
 			for (long j = 0; j < innerIterationsCount; j++)
 			{
-				if (!isSelfMatch(i, chainsOfIndexes[chainIndex][j], n))
+				bool selfMatch = isSelfMatch(i, chainsOfIndexes[chainIndex][j], n);
+				if (!selfMatch)
 				{
 					double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[chainsOfIndexes[chainIndex][j]], n);
 					if (dist < bsfDist) {
@@ -182,16 +175,21 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 				}
 			}
 			for (long j = 0; j < countOfSubseq; j++)
-			{
-				if (binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j) == -1 && !isSelfMatch(i, j, n))
+			{	
+				bool selfMatch = isSelfMatch(i, j, n);
+				if (!selfMatch)
 				{
-					double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
-					if (dist < bsfDist) {
-						earlyExit = true;
-						break;
-					}
-					if (dist < min) {
-						min = dist;
+					binSearchResult = binSearch(chainsOfIndexes[chainIndex], innerIterationsCount, j);
+					if (binSearchResult == -1)
+					{
+						double dist = distance2(timeSeriesSubsequences[i], timeSeriesSubsequences[j], n);
+						if (dist < bsfDist) {
+							earlyExit = true;
+							break;
+						}
+						if (dist < min) {
+							min = dist;
+						}
 					}
 				}
 			}
@@ -204,6 +202,8 @@ int findDiscord(series_t T, const int m, const int n, float* bsf_dist, int threa
 			}
 		}
 	}
+	double end = omp_get_wtime();
+	*_time += (end - start);
 	*bsf_dist = bsfDist;
 	return bsfPos;
 }
@@ -232,56 +232,13 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n)
 	return result;
 }
 
-// TODO: rewrite to qsort 
-void sortIndexes(long* array, long n)
-{
-	#pragma omp parallel for num_threads(_threadNum)
-	for (long i = 0; i < n - 1; i++)
-	{
-		for (long j = 0; j < n - i - 1; j++)
-		{
-			if (array[j] > array[j + 1])
-			{
-				int tmp = array[j];
-				#pragma omp critical
-				{
-					array[j] = array[j + 1];
-					array[j + 1] = tmp;
-				}
-			}
-		}
-	}
-}
-
 /*
- * Binary search in given array
- * Return: index of element or -1
- */
-long binSearch(long* array, long size, long value)
-{
-	long average_index = 0; // переменная для хранения индекса среднего элемента массива
-	long first_index = 0; // индекс первого элемента в массиве
-	long last_index = size - 1; // индекс последнего элемента в массиве
-	if (last_index == -1)
-	{
-		//cout << "\narray is empty" << endl; // массив пуст
-		return last_index;
-	}
-	while (first_index < last_index)
-	{
-		average_index = first_index + (last_index - first_index) / 2; // меняем индекс среднего значения
-		value <= array[average_index] ? last_index = average_index : first_index = average_index + 1;    // найден ключевой элемент или нет 
-	}
-	if (array[last_index] == value)
-	{
-		return last_index;
-	}
-	else
-	{
-		return -1;
-	}
-}
-
+* Are sequences with given start indexes self match?
+* @param i - start index of first sequence
+* @param j - start index of second sequence
+* @param n - length of sequences
+* @return are self match or not
+*/
 bool isSelfMatch(long i, long j, long n)
 {
 	return !(j <= i - n || j >= i + n);
@@ -308,46 +265,5 @@ item_t distance2(const series_t series1, const series_t series2, const int lengt
 		sum += (series1[i] - series2[i]) * (series1[i] - series2[i]);
 	}
 	return sum;
-}
-
-/**
-* Finding min element in vector
-* @input series vector of data.
-* @input length The length of vector.
-* @output position
-*/
-item_t min(const series_t series, const int length, int* position)
-{
-	item_t result = series[0];
-	for (int i = 0; i < length; i++)
-	{
-		if (series[i] < result)
-		{
-			result = series[i];
-			*position = i;
-		}
-	}
-	return result;
-}
-
-/**
-* Finding max element in vector
-* @input series vector of data.
-* @input length The length of vector.
-* @output position
-*/
-item_t max(const series_t series, const int length, int* position)
-{
-	item_t result = series[0];
-
-	for (int i = 0; i < length; i++)
-	{
-		if (series[i] > result)
-		{
-			result = series[i];
-			*position = i;
-		}
-	}
-	return result;
 }
 

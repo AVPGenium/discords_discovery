@@ -9,7 +9,16 @@
 
 #include "Config.h"
 #include <iostream>
-#include <vector>
+
+/*
+* Are sequences with given start indexes not self match?
+* @param i - start index of first sequence
+* @param j - start index of second sequence
+* @param n - length of sequences
+* @return are self match or not
+*/
+#define IS_NOT_SELF_MATCH(i, j, n) ( !(j <= i - n || j >= i + n) )
+#define IS_SELF_MATCH(i, j, n) ( !(IS_NOT_SELF_MATCH(i, j, n)) )
 
 extern int bsfPos;
 extern float bsfDist;
@@ -18,25 +27,25 @@ extern series_t timeSeries;
 using namespace std;
 
 /**
-* РќР°С…РѕР¶РґРµРЅРёРµ РґРёСЃСЃРѕРЅР°РЅСЃР° Р·Р°РґР°РЅРЅРѕР№ РґР»РёРЅС‹ РІ РґР°РЅРЅРѕРј РІСЂРµРјРµРЅРЅРѕРј СЂСЏРґРµ
-* РґР»СЏ Р·Р°РґР°РЅРЅРѕР№ РїРѕРґРїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
-* @input T - РІСЂРµРјРµРЅРЅРѕР№ СЂСЏРґ
-* @input m - РґР»РёРЅР° РІСЂРµРјРµРЅРЅРѕРіРѕ СЂСЏРґР°
-* @input n - РґР»РёРЅР° РїРѕРґРїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
-* @output bsf_dist - СЂР°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ Р±Р»РёР¶Р°Р№С€РµРіРѕ СЃРѕСЃРµРґР°
-* @input threadNum - РєРѕР»-РІРѕ РїРѕС‚РѕРєРѕРІ, РЅР° РєРѕС‚РѕСЂС‹С… Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ Р°Р»РіРѕСЂРёС‚Рј
-* @output time - РІСЂРµРјСЏ Р·Р°С‚СЂР°С‡РµРЅРЅРѕРµ РЅР° РІС‹РїРѕР»РЅРµРЅРёРµ Р°Р»РіРѕСЂРёС‚РјР°
-* @return РёРЅРґРµРєСЃ РЅР°С‡Р°Р»Р° РґРёСЃСЃРѕРЅР°РЅСЃР°
+* Нахождение диссонанса заданной длины в данном временном ряде
+* для заданной подпоследовательности
+* @input T - временной ряд
+* @input m - длина временного ряда
+* @input n - длина подпоследовательности
+* @output bsf_dist - расстояние до ближайшего соседа
+* @input threadNum - кол-во потоков, на которых запускается алгоритм
+* @output time - время затраченное на выполнение алгоритма
+* @return индекс начала диссонанса
 */
 int findDiscord(const series_t T, const int m, const int n, float* bsf_dist, int threadNum, double* time);
 
 /**
-* РЎРѕР·РґР°РЅРёРµ РјР°С‚СЂРёС†С‹ РїРѕРґРїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚РµР№
-* РґР»СЏ Р·Р°РґР°РЅРЅРѕР№ РїРѕРґРїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
-* @param T - РІСЂРµРјРµРЅРЅРѕР№ СЂСЏРґ
-* @param m - РґР»РёРЅР° РІСЂРµРјРµРЅРЅРѕРіРѕ СЂСЏРґР°
-* @param n - РґР»РёРЅР° РїРѕРґРїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
-* @return РјР°С‚СЂРёС†Р° РїРѕРґРїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚РµР№
+* Создание матрицы подпоследовательностей
+* для заданной подпоследовательности
+* @param T - временной ряд
+* @param m - длина временного ряда
+* @param n - длина подпоследовательности
+* @return матрица подпоследовательностей
 */
 matrix_t createSubsequencies(const series_t T, const int m, const int n);
 
@@ -51,30 +60,14 @@ matrix_t createSubsequencies(const series_t T, const int m, const int n);
 */
 item_t distance2(const series_t series1, const series_t series2, const int length);
 
-/**
-* Finding min element in vector
-* @input series vector of data.
-* @input length The length of vector.
-* @output position
-*/
-item_t min(const series_t series, const int length, int* position);
-
-/**
-* Finding max element in vector
-* @input series vector of data.
-* @input length The length of vector.
-* @output position
-*/
-item_t max(const series_t series, const int length, int* position);
-
 /*
-* Binary search in given array
-* Return: index of element or -1
+* @deprecated: use macro instead
+* Are sequences with given start indexes self match?
+* @param i - start index of first sequence
+* @param j - start index of second sequence
+* @param n - length of sequences
+* @return are self match or not
 */
-long binSearch(long* array, long size, long value);
-
-void sortIndexes(long* array, long n);
-
 bool isSelfMatch(long i, long j, long n);
 
 #endif

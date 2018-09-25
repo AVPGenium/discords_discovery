@@ -73,7 +73,7 @@ bool writeResult(ofstream writer, long bsfPos, float bsfDist) {
 }
 
 bool writeResult(long bsfPos, float bsfDist, float time, int threadsNum) {
-	ofstream fout("result.txt", ios_base::out | ios_base::app);
+	ofstream fout("result1.txt", ios_base::out | ios_base::app);
 	fout << bsfPos << " " << bsfDist << " " << time << " " << threadsNum << "\n";
 	fout.close(); // закрываем файл
 	return true;

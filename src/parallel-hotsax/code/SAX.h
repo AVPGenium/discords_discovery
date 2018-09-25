@@ -26,7 +26,7 @@ word saxify(series_t timeSeries, const int n);
 * normalizing the input time series.
 * Input: timeSeries and it's size
 */
-void train(series_t timeSeries, const long size, int threadNum, double* time);
+void train(series_t timeSeries, const long size);
 
 /*
 * Normalize time series to zero mean and stdev

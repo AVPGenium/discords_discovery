@@ -5,7 +5,7 @@
 #ifndef FILE_UTILS_H
 #define FILE_UTILS_H
 
-#include <fstream> //Р”Р»СЏ СЂР°Р±РѕС‚С‹ СЃ С„Р°Р№Р»Р°РјРё
+#include <fstream> //Для работы с файлами
 #include "Config.h"
 
 using namespace std;

@@ -11,6 +11,7 @@
 #include <float.h>
 #include <iostream>
 #include "omp.h"
+#include "Globals.h"
 
 size_t m_window_size;
 size_t m_string_size = 4;
@@ -26,10 +27,6 @@ symbol alphabet[4] = { 'a', 'b', 'c', 'd' };
 const int wordLength = 4;
 
 bool m_trained = false;
-
-// from main function
-int _threadNum;
-double* _time;
 
 /*
  * Create SAX representation of given subsequnce of time series
@@ -86,6 +83,7 @@ series_t PAA(series_t sequence, const int n)
 	{
 		paa[i] = 0;
 	}
+	double start = omp_get_wtime();
 	long paa_window = n / m_string_size;
 	for (int i = 0; i < wordLength; i++)
 	{
@@ -95,19 +93,19 @@ series_t PAA(series_t sequence, const int n)
 		}
 		paa[i] *= 1.0f * m_string_size / n;
 	}
-	
+	double end = omp_get_wtime();
+	*_time += (end - start);
 	return paa;
 }
 
 /*
- * Finds the baseline mean and stdevs, which are used in
+ * Finds the baseline mean and stdev, which are used in
  * normalizing the input time series.
  * Input: timeSeries and it's size
  */
-void train(series_t timeSeries, const long size, int threadNum, double* time) {
+void train(series_t timeSeries, const long size) {
+	double start = omp_get_wtime();
 	m_trained = false;
-	_threadNum = threadNum;
-	_time = time;
 	double mean = 0;
 	double stdev = DBL_MIN;
 	if (size < 2) 
@@ -136,6 +134,8 @@ void train(series_t timeSeries, const long size, int threadNum, double* time) {
 	m_baseline_stdev = stdev;
 	std::cout << mean << " " << stdev << std::endl;
 	m_trained = true;
+	double end = omp_get_wtime();
+	*_time += (end - start);
 }
 
 /*
@@ -197,7 +197,7 @@ long** generateWordsTable()
 		a[j] = 1;
 	}
 	double start = omp_get_wtime();
-	#pragma omp parallel for num_threads(_threadNum) shared(a, wordsTable)
+	// #pragma omp parallel for num_threads(_threadNum) shared(a, wordsTable)
 	for (int i = 0; i < powl(m_alphabet_size, m_string_size); i++)
 	{
 		for (int j = 0; j < m_string_size; j++)

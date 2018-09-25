@@ -1,5 +1,6 @@
 /**
 * Parallel discords search algorithm for Intel Xeon Phi architecture
+* based on naive algorithm with distance matrix
 * A module containing discords search logic
 * (c) 2018 Mikhail Zymbler, Andrei Poliakov
 */
